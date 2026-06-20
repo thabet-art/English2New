@@ -1,995 +1,3405 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <title>english2test</title>
-    
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>بوابة اختبارات اللغة الإنجليزية التفاعلية الشاملة</title>
+
+    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Cairo for Arabic, Inter for English -->
+
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
+
         body {
+
             font-family: 'Cairo', 'Inter', sans-serif;
+
             background-color: #f8fafc;
+
         }
+
         .english-text {
+
             font-family: 'Inter', sans-serif;
+
         }
+
+        /* Custom scrollbar */
+
         ::-webkit-scrollbar {
+
             width: 6px;
+
             height: 6px;
+
         }
+
         ::-webkit-scrollbar-track {
+
             background: #f1f5f9;
+
         }
+
         ::-webkit-scrollbar-thumb {
+
             background: #cbd5e1;
+
             border-radius: 4px;
+
         }
+
         ::-webkit-scrollbar-thumb:hover {
+
             background: #94a3b8;
+
         }
+
         .transition-all-300 {
+
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
         }
+
         .premium-shadow {
+
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+
         }
+
+        /* Custom styles for quiz options */
+
         .option-label {
+
             transition: background-color 0.2s, border-color 0.2s;
+
             cursor: pointer;
+
             border: 2px solid #e2e8f0;
+
         }
+
         .option-label:hover {
+
             border-color: #6366f1;
+
             background-color: #f8fafc;
+
         }
+
         .option-input {
+
             display: none;
+
         }
+
         .checked-indicator {
+
             transition: all 0.15s ease-in-out;
+
             display: inline-block;
+
             width: 1.1rem;
+
             height: 1.1rem;
+
             border-radius: 0.25rem;
+
             border: 2px solid #cbd5e1;
+
             flex-shrink: 0;
+
         }
+
         .option-input:checked + .checked-indicator {
+
             background-color: #6366f1;
+
             border-color: #6366f1;
+
             position: relative;
+
         }
+
         .option-input:checked + .checked-indicator::after {
+
             content: '✓';
+
             color: white;
+
             font-size: 0.75rem;
+
             position: absolute;
+
             top: 50%;
+
             left: 50%;
+
             transform: translate(-50%, -50%);
+
         }
+
+        /* Feedback colors */
+
         .bg-correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
+
         .bg-incorrect { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
         .bg-correct-light { background-color: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
+
     </style>
+
 </head>
+
 <body class="min-h-screen text-slate-800 flex flex-col antialiased">
 
+    <!-- Canvas Confetti Overlay -->
+
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+    <!-- App Header -->
+
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+
             <div class="flex items-center justify-between">
+
+                
+
+                <!-- Logo -->
+
                 <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+
                     <div class="p-2.5 bg-gradient-to-tr from-indigo-500 to-violet-600 text-white rounded-xl shadow-md shadow-indigo-100">
+
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+
                         </svg>
+
                     </div>
+
                     <div>
-                        <h1 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">اختبار مادة الانجليزي 2 التفاعلية</h1>
-                        <p class="text-[11px] text-indigo-600 font-bold">موقع تعليمي</p>
+
+                        <h1 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">بوابة الإنجليزية التفاعلية</h1>
+
+                        <p class="text-[11px] text-indigo-600 font-bold">المنصة التعليمية لتقييم واختبار المهارات</p>
+
                     </div>
+
                 </div>
+
+                <!-- Global Sound / Settings Toggle -->
+
                 <div class="flex items-center gap-2">
-                    <button id="sound-btn" onclick="toggleSound()" class="p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 text-slate-500 hover:text-indigo-600 transition-all shadow-sm">
+
+                    <button id="sound-btn" onclick="toggleSound()" class="p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 text-slate-500 hover:text-indigo-600 transition-all shadow-sm" title="كتم/تشغيل الصوت">
+
                         <svg id="sound-on-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+
                         </svg>
+
                         <svg id="sound-off-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zm10.95-6.05l4.24 4.24m0-4.24l-4.24 4.24" />
+
                         </svg>
+
                     </button>
+
+                    
+
                     <button onclick="resetAllQuizzesWithConfirm()" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition-all">
+
                         تصفير المنصة بالكامل
+
                     </button>
+
                 </div>
+
             </div>
+
         </div>
+
     </header>
 
+    <!-- App Main Workspace -->
+
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
         
+
+        <!-- SECTION 1: DASHBOARD / HOME SCREEN -->
+
         <section id="screen-home" class="space-y-8 block">
+
+            
+
+            <!-- Hero Section -->
+
             <div class="bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-10 text-white relative overflow-hidden shadow-xl">
+
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.15),transparent_45%)]"></div>
+
                 <div class="relative z-10 max-w-3xl">
+
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-extrabold bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 rounded-full mb-4">
-                      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        
-                  </span>
-                          
+
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+
+                        أحدث إصدار تفاعلي مدمج 2026
+
+                    </span>
+
+                    <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight mb-3">طور مهاراتك اللغوية باختبارات ذكية</h2>
+
+                    <p class="text-sm sm:text-base text-slate-300 leading-relaxed mb-6">مرحباً بك في بوابتك التفاعلية المخصصة لتعلم واختبار مستواك في قواعد ومصطلحات وترجمات اللغة الإنجليزية. تحتوي المنصة على 4 أنماط مختلفة من الاختبارات المتطورة بمجموع <span class="text-white font-black underline">245 سؤالاً</span> مع تتبع فوري لمستواك العام.</p>
+
+                    
+
+                    <!-- General Stats Indicators -->
+
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-indigo-500/30">
+
                         <div>
+
                             <div class="text-[10px] text-indigo-300 uppercase font-black">النقاط الكلية المكتسبة</div>
+
                             <div class="text-xl sm:text-2xl font-black text-white" id="dash-global-score">0.00 <span class="text-xs text-indigo-300 font-normal">/ 611</span></div>
+
                         </div>
+
                         <div>
+
                             <div class="text-[10px] text-indigo-300 uppercase font-black">الأسئلة التي تم حلها</div>
+
                             <div class="text-xl sm:text-2xl font-black text-white" id="dash-global-answered">0 <span class="text-xs text-indigo-300 font-normal">/ 245</span></div>
+
                         </div>
+
                         <div>
+
                             <div class="text-[10px] text-indigo-300 uppercase font-black">مستوى الإنجاز الإجمالي</div>
+
                             <div class="text-xl sm:text-2xl font-black text-emerald-400" id="dash-global-percent">0%</div>
+
                         </div>
+
                         <div>
+
                             <div class="text-[10px] text-indigo-300 uppercase font-black">التصنيف الحالي للمستخدم</div>
+
                             <div class="text-sm sm:text-base font-black text-indigo-200" id="dash-global-level">مبتدئ (Beginner)</div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
+            <!-- Quiz Types Title -->
 
             <div>
-                <h3 class="text-xl font-extrabold text-slate-950 mb-2">أنواع الاختبارات المتاحة</h3>
-                <p class="text-xs text-slate-500">اختر نوع الاختبار للبدء في الحل ومراجعة الأسئلة والترجمات الحية.</p>
+
+                <h3 class="text-xl font-extrabold text-slate-950 mb-2">أنماط الاختبارات المتاحة</h3>
+
+                <p class="text-xs text-slate-500">اختر أحد أنماط الاختبارات أدناه للبدء في الحل ومراجعة الأسئلة والترجمات الحية.</p>
+
             </div>
+
+            <!-- 4 Test Options Grid -->
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                
+
+                <!-- CARD 1: True / False Quiz -->
+
                 <div class="bg-white border border-slate-200/80 rounded-2xl p-6 flex flex-col justify-between hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-50/10 transition-all duration-300 group">
+
                     <div class="space-y-4">
+
                         <div class="flex items-center justify-between">
+
                             <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-all-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+                                </svg>
+
                             </div>
-                            <span class="text-xs font-bold text-slate-400">148 درجة قصوى</span>
+
+                            <span class="text-xs font-bold text-slate-400">148 نقطة قصوى</span>
+
                         </div>
+
                         <div>
+
                             <h4 class="text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">الاختبار الأول: صح أم خطأ (True / False)</h4>
-                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 74 سؤال. كل سؤال بنقطتين، مع توفير ترجمة وتوضيح فوري للعربية بعد الإجابة.</p>
+
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 74 عبارة شاملة لتقييم مدى دقة مفرداتك الإنجليزية وقواعدك الأساسية. كل سؤال بنقطتين، مع توفير ترجمة وتوضيح فوري للعربية بعد الإجابة.</p>
+
                         </div>
+
                     </div>
+
+                    <!-- Card Progress Indicator -->
+
                     <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+
                         <div class="flex flex-col">
+
                             <span class="text-[10px] text-slate-400 font-bold uppercase">الحالة والتقدم</span>
+
                             <span class="text-xs font-extrabold text-slate-700" id="prog-text-q1">0 من 74 سؤالاً</span>
+
                         </div>
-                        <button onclick="startQuiz(1)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black rounded-xl shadow-md shadow-indigo-100 transition-all">ابدأ الاختبار</button>
+
+                        <button onclick="navigateTo('quiz1')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black rounded-xl shadow-md shadow-indigo-100 transition-all flex items-center gap-1">
+
+                            ابدأ الاختبار
+
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+
+                        </button>
+
                     </div>
+
                 </div>
+
+                <!-- CARD 2: Multiple Choice (Single Select) -->
 
                 <div class="bg-white border border-slate-200/80 rounded-2xl p-6 flex flex-col justify-between hover:border-violet-200 hover:shadow-lg hover:shadow-violet-50/10 transition-all duration-300 group">
+
                     <div class="space-y-4">
+
                         <div class="flex items-center justify-between">
+
                             <div class="p-3 bg-violet-50 text-violet-600 rounded-xl group-hover:bg-violet-600 group-hover:text-white transition-all-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" />
+
+                                </svg>
+
                             </div>
-                            <span class="text-xs font-bold text-slate-400">134 درجة قصوى</span>
+
+                            <span class="text-xs font-bold text-slate-400">134 نقطة قصوى</span>
+
                         </div>
+
                         <div>
-                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-violet-600 transition-colors">الاختبار الثاني: خيار واحد</h4>
-                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 67 سؤالاً خيار وحيد. يقيس مهاراتك الإعرابية والتركيبية المتقدمة في الجمل الإنجليزية الأساسية مع ترجمة توضيحية فورية.</p>
+
+                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-violet-600 transition-colors">الاختبار الثاني: اختيار من متعدد - خيار واحد</h4>
+
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 67 سؤالاً بنظام الاختيارات الأربعة لكل جملة. يقيس مهاراتك الإعرابية والتركيبية المتقدمة في الجمل الإنجليزية الأساسية مع ترجمة توضيحية فورية.</p>
+
                         </div>
+
                     </div>
+
+                    <!-- Card Progress Indicator -->
+
                     <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+
                         <div class="flex flex-col">
+
                             <span class="text-[10px] text-slate-400 font-bold uppercase">الحالة والتقدم</span>
+
                             <span class="text-xs font-extrabold text-slate-700" id="prog-text-q2">0 من 67 سؤالاً</span>
+
                         </div>
-                        <button onclick="startQuiz(2)" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-black rounded-xl shadow-md shadow-violet-100 transition-all">ابدأ الاختبار</button>
+
+                        <button onclick="navigateTo('quiz2')" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-black rounded-xl shadow-md shadow-violet-100 transition-all flex items-center gap-1">
+
+                            ابدأ الاختبار
+
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+
+                        </button>
+
                     </div>
+
                 </div>
+
+                <!-- CARD 3: Multiple Choice (Multi Select - Deducting) -->
 
                 <div class="bg-white border border-slate-200/80 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-50/10 transition-all duration-300 group">
+
                     <div class="space-y-4">
+
                         <div class="flex items-center justify-between">
+
                             <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-all-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+
+                                </svg>
+
                             </div>
-                            <span class="text-xs font-bold text-slate-400">126 درجة قصوى</span>
+
+                            <span class="text-xs font-bold text-slate-400">126 نقطة قصوى</span>
+
                         </div>
+
                         <div>
-                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">الاختبار الثالث: خيار متعدد</h4>
+
+                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">الاختبار الثالث: اختيار من متعدد - إجابات متعددة</h4>
+
                             <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 63 سؤالاً. يحتوي كل سؤال على خيارين صحيحين على الأقل. يتم احتساب الدرجة بناءً على مبدأ <span class="text-rose-600 font-bold">"الخطأ يأكل الصواب"</span> لتجنب التخمين العشوائي.</p>
+
                         </div>
+
                     </div>
+
+                    <!-- Card Progress Indicator -->
+
                     <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+
                         <div class="flex flex-col">
+
                             <span class="text-[10px] text-slate-400 font-bold uppercase">الحالة والتقدم</span>
+
                             <span class="text-xs font-extrabold text-slate-700" id="prog-text-q3">0 من 63 سؤالاً</span>
+
                         </div>
-                        <button onclick="startQuiz(3)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-md shadow-emerald-100 transition-all">ابدأ الاختبار</button>
+
+                        <button onclick="navigateTo('quiz3')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-md shadow-emerald-100 transition-all flex items-center gap-1">
+
+                            ابدأ الاختبار
+
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+
+                        </button>
+
                     </div>
+
                 </div>
+
+                <!-- CARD 4: Translation Quiz -->
 
                 <div class="bg-white border border-slate-200/80 rounded-2xl p-6 flex flex-col justify-between hover:border-amber-200 hover:shadow-lg hover:shadow-amber-50/10 transition-all duration-300 group">
+
                     <div class="space-y-4">
+
                         <div class="flex items-center justify-between">
+
                             <div class="p-3 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-600 group-hover:text-white transition-all-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+
+                                </svg>
+
                             </div>
-                            <span class="text-xs font-bold text-slate-400">205 درجة قصوى</span>
+
+                            <span class="text-xs font-bold text-slate-400">205 نقطة قصوى</span>
+
                         </div>
+
                         <div>
-                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-amber-600 transition-colors">الاختبار الرابع: مقالي(الترجمة)</h4>
+
+                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-amber-600 transition-colors">الاختبار الرابع: اختبار الترجمة والتحرير الشامل</h4>
+
                             <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 41 سؤالاً (27 ترجمة من الإنجليزية للعربية، و14 من العربية للإنجليزية). اكتب ترجمتك بحرية، وسيقوم النظام بمطابقتها وتقييمها بذكاء مع تزويدك بنموذج الإجابة الفوري.</p>
+
                         </div>
+
                     </div>
+
+                    <!-- Card Progress Indicator -->
+
                     <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+
                         <div class="flex flex-col">
+
                             <span class="text-[10px] text-slate-400 font-bold uppercase">الحالة والتقدم</span>
+
                             <span class="text-xs font-extrabold text-slate-700" id="prog-text-q4">0 من 41 سؤالاً</span>
+
                         </div>
-                        <button onclick="startQuiz(4)" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-black rounded-xl shadow-md shadow-amber-100 transition-all">ابدأ الاختبار</button>
+
+                        <button onclick="navigateTo('quiz4')" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-black rounded-xl shadow-md shadow-amber-100 transition-all flex items-center gap-1">
+
+                            ابدأ الاختبار
+
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+
+                        </button>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
 
+        <!-- SECTION 2: QUIZ INTERFACE WRAPPER (Dynamic Render Panel) -->
+
         <section id="screen-quiz-container" class="hidden space-y-6">
+
+            
+
+            <!-- Quiz Screen Header with Back buttons and local info -->
+
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+
                 <div class="flex items-center gap-3">
+
                     <button onclick="navigateTo('home')" class="p-2.5 hover:bg-slate-100 text-slate-700 rounded-xl transition-all border border-slate-200">
-                        <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+
+                        <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+
+                        </svg>
+
                     </button>
+
                     <div>
+
                         <h3 class="text-lg font-black text-slate-900" id="active-quiz-title">عنوان الاختبار النشط</h3>
+
                         <p class="text-xs text-slate-500" id="active-quiz-desc">تفاصيل نمط الأسئلة النشط هنا</p>
+
                     </div>
+
                 </div>
-                
+
+                <!-- Live stats inside the quiz -->
+
                 <div class="flex flex-wrap items-center gap-3 bg-slate-50 p-2 rounded-xl border border-slate-200 w-full sm:w-auto">
+
                     <div class="px-3 py-1 bg-white rounded-lg text-center min-w-[70px]">
+
                         <span class="block text-[9px] text-slate-400 font-bold">نقاط هذا النمط</span>
+
                         <span class="text-sm font-black text-indigo-700" id="active-quiz-score">0.00</span>
+
                     </div>
+
                     <div class="px-3 py-1 bg-white rounded-lg text-center min-w-[60px]">
+
                         <span class="block text-[9px] text-slate-400 font-bold">تم حلها</span>
+
                         <span class="text-sm font-black text-emerald-600" id="active-quiz-answered">0</span>
+
                     </div>
+
                     <div class="px-3 py-1 bg-white rounded-lg text-center min-w-[60px]">
+
                         <span class="block text-[9px] text-slate-400 font-bold">باقي</span>
+
                         <span class="text-sm font-black text-slate-600" id="active-quiz-remaining">0</span>
+
                     </div>
+
                 </div>
+
             </div>
 
+            <!-- Quiz Main Grid Layout (Left Navigation grid + Right card list) -->
+
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                
+
+                <!-- Right Side: Content and Filter Tools -->
+
                 <div class="lg:col-span-8 space-y-6">
+
+                    
+
+                    <!-- Search and filters -->
+
                     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+
                         <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
+
                             <div class="relative w-full sm:max-w-xs">
+
                                 <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+
+                                    </svg>
+
                                 </span>
-                                <input type="text" id="quiz-search-input" oninput="applyActiveQuizFilters()" placeholder="ابحث في الأسئلة والترجمات..." class="w-full pr-9 pl-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+
+                                <input type="text" id="quiz-search-input" oninput="applyActiveQuizFilters()" 
+
+                                       placeholder="ابحث في الأسئلة والترجمات..." 
+
+                                       class="w-full pr-9 pl-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+
                             </div>
+
                             <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl w-full sm:w-auto justify-center">
+
                                 <button onclick="setActiveViewMode('one')" id="vmode-one" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600">سؤال تلو آخر</button>
+
                                 <button onclick="setActiveViewMode('page')" id="vmode-page" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-indigo-700 shadow-sm">صفحات (10)</button>
+
                                 <button onclick="setActiveViewMode('all')" id="vmode-all" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600">عرض الكل</button>
+
                             </div>
+
                         </div>
+
                         <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+
                             <div class="flex flex-wrap gap-1.5">
+
                                 <button onclick="setActiveFilter('all')" id="filt-all" class="px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm">الكل</button>
+
                                 <button onclick="setActiveFilter('unanswered')" id="filt-unanswered" class="px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-lg">غير مجاب</button>
+
                                 <button onclick="setActiveFilter('correct')" id="filt-correct" class="px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-lg">صحيحة</button>
+
                                 <button onclick="setActiveFilter('wrong')" id="filt-wrong" class="px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-lg">خاطئة / ناقصة</button>
+
                             </div>
+
                             <label class="inline-flex items-center cursor-pointer">
+
                                 <input type="checkbox" id="hints-toggle" onchange="toggleActiveHints()" class="sr-only peer">
-                                <div class="w-9 h-5 bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 relative after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:-translate-x-4"></div>
-                                <span class="mr-2 text-xs font-bold text-slate-600">إظهار التوضيح فوراً</span>
+
+                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:-translate-x-full rtl:peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600 relative"></div>
+
+                                <span class="mr-2 text-xs font-bold text-slate-600">إظهار الترجمة فوراً</span>
+
                             </label>
+
                         </div>
+
                     </div>
+
+                    <!-- Alerts for Active Filter -->
 
                     <div id="active-filter-alert" class="hidden bg-indigo-50 border border-indigo-100 text-indigo-800 text-xs p-3 rounded-xl flex items-center justify-between">
+
                         <span id="active-filter-alert-text">تصفية فعالة حالياً.</span>
+
                         <button onclick="clearActiveFilters()" class="text-xs font-bold underline hover:text-indigo-900">إلغاء التصفية</button>
+
                     </div>
 
+                    <!-- Empty State in Quizzes -->
+
                     <div id="quiz-empty-state" class="hidden bg-white border border-slate-200 rounded-2xl p-12 text-center">
+
                         <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+                            </svg>
+
                         </div>
+
                         <h3 class="text-base font-bold text-slate-800 mb-1">لا توجد أسئلة مطابقة</h3>
-                        <p class="text-xs text-slate-500 max-w-sm mx-auto">غير معايير الفلترة أو البحث للعثور على أسئلة.</p>
+
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">جرب تغيير الكلمات المفتاحية في مربع البحث أو قم بتعديل علامات التصفية.</p>
+
                     </div>
+
+                    <!-- Active Questions Holder -->
 
                     <div id="active-questions-container" class="space-y-4"></div>
 
+                    <!-- Pagination -->
+
                     <div id="quiz-pagination-panel" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
-                        <button id="q-prev-page-btn" onclick="changeActivePage(-1)" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl disabled:opacity-50 flex items-center gap-1">السابق</button>
+
+                        <button id="q-prev-page-btn" onclick="changeActivePage(-1)" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl disabled:opacity-50 transition-all flex items-center gap-1">
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+
+                            السابق
+
+                        </button>
+
                         <span class="text-xs font-semibold text-slate-500" id="q-page-indicator">الصفحة 1 من 1</span>
-                        <button id="q-next-page-btn" onclick="changeActivePage(1)" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl disabled:opacity-50 flex items-center gap-1">التالي</button>
+
+                        <button id="q-next-page-btn" onclick="changeActivePage(1)" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl disabled:opacity-50 transition-all flex items-center gap-1">
+
+                            التالي
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+
+                        </button>
+
                     </div>
+
                 </div>
+
+                <!-- Left Side: Grid navigation & details -->
 
                 <div class="lg:col-span-4 space-y-6">
-                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm sticky top-[100px] space-y-4">
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm sticky top-[130px] space-y-4">
+
                         <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                            <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-sm">شبكة الأسئلة التفاعلية</h4>
-                            <button onclick="resetActiveQuizOnly()" class="text-[10px] font-black text-rose-500 bg-rose-50 hover:bg-rose-100 px-2 py-1.5 rounded-lg transition-all">تصفير هذا النمط</button>
+
+                            <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-sm">
+
+                                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z" />
+
+                                </svg>
+
+                                شبكة الأسئلة التفاعلية
+
+                            </h4>
+
+                            <button onclick="resetActiveQuizOnly()" class="text-[10px] font-black text-rose-500 bg-rose-50 hover:bg-rose-100 px-2 py-1.5 rounded-lg transition-all">
+
+                                تصفير هذا النمط
+
+                            </button>
+
                         </div>
-                        <p class="text-xs text-slate-400 leading-relaxed">انقر على الرقم للتنقل الفوري للأسئلة.</p>
+
+                        
+
+                        <p class="text-xs text-slate-400 leading-relaxed">انقر مباشرة على الرقم للتنقل الفوري للأسئلة. توضح الألوان حالة تقدمك.</p>
+
+                        <!-- Nav Numbers Grid -->
+
                         <div class="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-6 gap-1.5 max-h-[250px] overflow-y-auto p-1 border border-slate-100 rounded-xl" id="active-grid-nav-container"></div>
+
+                        <!-- Legend -->
+
                         <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 text-[10px] font-bold text-slate-500">
-                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-100 border border-slate-300"></span><span>غير مجاب</span></div>
-                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span><span>صحيحة</span></div>
-                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span><span>خاطئة</span></div>
+
+                            <div class="flex items-center gap-1">
+
+                                <span class="w-2.5 h-2.5 rounded-full bg-slate-100 border border-slate-300"></span>
+
+                                <span>غير مجاب</span>
+
+                            </div>
+
+                            <div class="flex items-center gap-1">
+
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+
+                                <span>صحيحة</span>
+
+                            </div>
+
+                            <div class="flex items-center gap-1">
+
+                                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+
+                                <span>خاطئة</span>
+
+                            </div>
+
+                            <div class="flex items-center gap-1">
+
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-100 border border-indigo-400"></span>
+
+                                <span>النشط حالياً</span>
+
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
     </main>
 
-    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs font-bold text-slate-400 mt-12">
-        جميع الحقوق محفوظة © علي 2026م</footer>
+    <!-- Unified Toast Notification System -->
+
+    <div id="toast-notification" class="hidden transform translate-y-10 opacity-0 transition-all duration-300 fixed bottom-6 left-6 z-50 max-w-sm bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center justify-between gap-4">
+
+        <div class="flex items-center gap-3">
+
+            <div class="p-1.5 bg-emerald-500 text-white rounded-lg" id="toast-icon-wrapper">
+
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="toast-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+
+            </div>
+
+            <div>
+
+                <p class="text-xs font-black" id="toast-title">عنوان التنبيه</p>
+
+                <p class="text-[11px] text-slate-300 mt-0.5" id="toast-desc">التفاصيل هنا</p>
+
+            </div>
+
+        </div>
+
+        <button onclick="hideToast()" class="text-slate-400 hover:text-white text-xs font-bold">إغلاق</button>
+
+    </div>
+
+    <!-- Confirm Modals -->
+
+    <div id="reset-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm">
+
+        <div class="bg-white max-w-sm w-full p-6 rounded-3xl shadow-2xl border border-slate-100 transform scale-95 transition-all duration-300 text-center">
+
+            <div class="w-12 h-12 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4">
+
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+
+            </div>
+
+            <h3 class="text-lg font-extrabold text-slate-900 mb-2" id="reset-modal-title">تأكيد المسح?</h3>
+
+            <p class="text-xs text-slate-500 mb-6" id="reset-modal-body">هل أنت متأكد من رغبتك في مسح الإنجازات والتقدم؟ لن تتمكن من التراجع عن هذه الخطوة.</p>
+
+            <div class="flex gap-3">
+
+                <button id="reset-confirm-btn" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-black rounded-xl transition-all">نعم، امسح كل شيء</button>
+
+                <button onclick="closeResetModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all">إلغاء</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- App Footer -->
+
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400 font-bold">
+
+            &copy; 2026 بوابة اختبارات اللغة الإنجليزية التفاعلية المدمجة. مخصصة للدراسة والتقييم الذاتي.
+
+        </div>
+
+    </footer>
+
+    <!-- INJECTING DATABASES AND SCRIPTS -->
 
     <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let soundEnabled = true;
+
+        // QUIZ 1: True / False (74 questions)
+
+        const db_quiz1 = [
+
+            { id: 1, question: "The opposites of the words \"happy-legal\" are \"sad-illegal\".", correctAnswer: "TRUE", score: 2, hint: "أضداد كلمتي \"happy\" (سعيد) و \"legal\" (قانوني) هي \"sad\" (حزين) و \"illegal\" (غير قانوني)." },
+
+            { id: 2, question: "The noun of the verb \"describe\" is \"description\".", correctAnswer: "TRUE", score: 2, hint: "الاسم من الفعل \"describe\" (يصف) هو \"description\" (وصف)." },
+
+            { id: 3, question: "\"I realize what Ali wants to say\", the word \"realize\" means \"understand\".", correctAnswer: "TRUE", score: 2, hint: "في جملة: \"I realize what Ali wants to say\"، تعني كلمة \"realize\" (يدرك) \"understand\" (يفهم)." },
+
+            { id: 4, question: "The opposite of \"expensive\" is \"high\".", correctAnswer: "FALSE", score: 2, hint: "ضد كلمة \"expensive\" (غالٍ) هو \"cheap\" (رخيص)، وليس \"high\" (مرتفع)." },
+
+            { id: 5, question: "Tourism in Yemen becomes very powerful in the field of culture.", correctAnswer: "TRUE", score: 2, hint: "أصبحت السياحة في اليمن قوية جداً في مجال الثقافة والآثار." },
+
+            { id: 6, question: "The prefix of the word \"hurry\" is \"hurries\".", correctAnswer: "FALSE", score: 2, hint: "البادئات (Prefixes) تأتي في بداية الكلمة بينما \"hurries\" هي تصريف ينتهي بلاحقة (Suffix) بعد قلب حرف الواي." },
+
+            { id: 7, question: "The meaning of \"deal with\" in Arabic is \"يتعامل مع\".", correctAnswer: "TRUE", score: 2, hint: "معنى الفعل المركب \"deal with\" هو \"يتعامل مع\" أو يعالج المشكلة." },
+
+            { id: 8, question: "how many rice do you want", correctAnswer: "FALSE", score: 2, hint: "كلمة الأرز (rice) هي اسم غير معدود، لذا يجب استخدام \"how much\" وليس \"how many\"." },
+
+            { id: 9, question: "the meaning of (establish) is found", correctAnswer: "TRUE", score: 2, hint: "من معاني كلمة (establish) (يُنشئ/يُقيم) هي تأتي بمعنى \"found\" (يؤسس)." },
+
+            { id: 10, question: "the word expensive means رخيص (cheap)", correctAnswer: "FALSE", score: 2, hint: "كلمة \"expensive\" تعني (غالٍ) وهي عكس كلمة \"cheap\" (رخيص)." },
+
+            { id: 11, question: "to greet someone is to say good bye", correctAnswer: "FALSE", score: 2, hint: "أن تُحيي شخصاً (greet) يعني قول مرحباً \"hello\"، بينما \"good bye\" هي لوداعه." },
+
+            { id: 12, question: "The suffix of the word \"carry\" is \"carrying\".", correctAnswer: "TRUE", score: 2, hint: "اللاحقة (Suffix) المضافة لكلمة \"carry\" (يحمل) هي \"carrying\" بعد إضافة الـ (ing)." },
+
+            { id: 13, question: "The same meaning of the phrasal verb (get away) is escape.", correctAnswer: "TRUE", score: 2, hint: "نفس معنى الفعل المركب (get away) هو \"escape\" (يهرب/يفر)." },
+
+            { id: 14, question: "I watch TV every light.", correctAnswer: "FALSE", score: 2, hint: "الصحيح قول \"every night\" (كل ليلة) وليس \"every light\" (كل ضوء)." },
+
+            { id: 15, question: "many is used with the noun (water).", correctAnswer: "FALSE", score: 2, hint: "الماء \"water\" اسم غير معدود ويأخذ \"much\"، بينما \"many\" تأتي مع الأسماء المعدودة." },
+
+            { id: 16, question: "The car is an electronic machine.", correctAnswer: "TRUE", score: 2, hint: "تعتبر السيارة الحديثة آلة إلكترونية ميكانيكية متطورة." },
+
+            { id: 17, question: "The passive form of the verb \"give\" is \"given\".", correctAnswer: "TRUE", score: 2, hint: "صيغة التصريف الثالث (Past Participle) المخصصة للمبني للمجهول للفعل \"give\" هي \"given\"." },
+
+            { id: 18, question: "The meaning of \"communication\" is وسائل اتصال.", correctAnswer: "TRUE", score: 2, hint: "معنى كلمة \"communication\" هو الاتصال والاتصالات." },
+
+            { id: 19, question: "The meaning of the word \"reply\" is \"ask\".", correctAnswer: "FALSE", score: 2, hint: "كلمة \"reply\" تعني (يجيب/يرد) وهي عكس كلمة \"ask\" (يسأل)." },
+
+            { id: 20, question: "The opposite of \"cold\" is \"hot\".", correctAnswer: "TRUE", score: 2, hint: "ضد كلمة \"cold\" (بارد) هو \"hot\" (ساخن/حار)." },
+
+            { id: 21, question: "The past tense of the verb \"use\" is \"used\".", correctAnswer: "TRUE", score: 2, hint: "الفعل المنتظم \"use\" ماضيه \"used\" بإضافة حرف d." },
+
+            { id: 22, question: "Stay away means \"not go near\".", correctAnswer: "TRUE", score: 2, hint: "\"Stay away\" (ابقَ بعيداً) تعني حرفياً عدم الاقتراب \"not go near\"." },
+
+            { id: 23, question: "The opposite meaning of the word \"latter\" is \"former\".", correctAnswer: "TRUE", score: 2, hint: "ضد كلمة \"latter\" (الأخير/اللاحق في الذكر) هو \"former\" (السابق/الأول في الذكر)." },
+
+            { id: 24, question: "A plane is faster than a car.", correctAnswer: "TRUE", score: 2, hint: "الطائرة أسرع بكثير كوسيلة مواصلات مقارنة بالسيارة." },
+
+            { id: 25, question: "The suffix of the word \"pay\" is \"paying\".", correctAnswer: "TRUE", score: 2, hint: "اللاحقة لكلمة \"pay\" هي إضافة الـ \"ing\" لتصبح \"paying\"." },
+
+            { id: 26, question: "The opposite of \"big\" is \"great\".", correctAnswer: "FALSE", score: 2, hint: "ضد كلمة \"big\" (كبير) هو \"small\" (صغير)؛ بينما \"great\" تعني عظيم." },
+
+            { id: 27, question: "He do his homework.", correctAnswer: "FALSE", score: 2, hint: "الصياغة خاطئة. الصحيح للمفرد الغائب: \"He does his homework\"." },
+
+            { id: 28, question: "The opposite of \"send\" is \"reply\".", correctAnswer: "FALSE", score: 2, hint: "ضد كلمة \"send\" (يرسل) هو \"receive\" (يستلم/يستقبل)، وليس \"reply\"." },
+
+            { id: 29, question: "The meaning of \"travel agents\" is عملاء السفر.", correctAnswer: "FALSE", score: 2, hint: "المعنى الصحيح لـ \"travel agents\" هو (وكلاء السفر/وكالات السياحة) وليس العملاء." },
+
+            { id: 30, question: "Look, there is a boy \"eat\" behind the door. is correct.", correctAnswer: "FALSE", score: 2, hint: "الجملة خاطئة؛ يجب استخدام صيغة اسم الفاعل \"eating\" أو جملة تابعة." },
+
+            { id: 31, question: "The exact meaning of the word \"several\" is \"a trip\".", correctAnswer: "FALSE", score: 2, hint: "كلمة \"several\" تعني (عدة/متعدد) بينما \"trip\" تعني رحلة." },
+
+            { id: 32, question: "The word \"much\" is used before uncountable nouns.", correctAnswer: "TRUE", score: 2, hint: "تُستخدم \"much\" مع الكميات والأسماء غير المعدودة (uncountable)." },
+
+            { id: 33, question: "The meaning of \"get on\" is \"continue\".", correctAnswer: "TRUE", score: 2, hint: "من معاني الفعل المركب \"get on\" هو الاستمرار والمضي قدماً في العمل." },
+
+            { id: 34, question: "The meaning of \"capacity\" in English is \"ability to do\".", correctAnswer: "TRUE", score: 2, hint: "معنى \"capacity\" في سياق القدرة الاستيعابية أو التشغيلية هو القدرة على الإنجاز." },
+
+            { id: 35, question: "The suffix of the word \"happy\" is \"happying\".", correctAnswer: "FALSE", score: 2, hint: "لا توجد كلمة \"happying\". اللاحقة لاسم الصفة هي \"ness\" لتصبح \"happiness\"." },
+
+            { id: 36, question: "Early is the opposite meaning of \"full\".", correctAnswer: "FALSE", score: 2, hint: "ضد كلمة \"early\" (مبكراً) هو \"late\" (متأخراً)، وضد \"full\" هو \"empty\"." },
+
+            { id: 37, question: "The superlative adjective of the adjective \"strong\" is \"strongest\".", correctAnswer: "TRUE", score: 2, hint: "صيغة التفضيل العليا للصفة القصيرة \"strong\" هي بالفعل \"strongest\"." },
+
+            { id: 38, question: "The meaning of the word \"actual\" is \"real\".", correctAnswer: "TRUE", score: 2, hint: "معنى كلمة \"actual\" (فعلي/حقيقي) هو \"real\"." },
+
+            { id: 39, question: "Yemen has nice places.", correctAnswer: "TRUE", score: 2, hint: "تمتلك اليمن معالم تاريخية ومناظر طبيعية ساحرة." },
+
+            { id: 40, question: "The relative pronoun \"who\" is used for things.", correctAnswer: "FALSE", score: 2, hint: "الضمير الموصول \"who\" يُستخدم للعاقل (الأشخاص)؛ وللأشياء نستخدم \"which\" أو \"that\"." },
+
+            { id: 41, question: "You must shut these doors is a correct sentence.", correctAnswer: "TRUE", score: 2, hint: "الجملة صحيحة تماماً قواعدياً ومعنوياً." },
+
+            { id: 42, question: "The meaning of \"city center\" is مركز المدينة.", correctAnswer: "TRUE", score: 2, hint: "الترجمة الصحيحة للعبارة هي مركز المدينة أو وسط البلد." },
+
+            { id: 43, question: "(The bed is kept) is in active form.", correctAnswer: "FALSE", score: 2, hint: "الجملة في صيغة المبني للمجهول (Passive Voice) لوجود verb to be ومعه التصريف الثالث." },
+
+            { id: 44, question: "The meaning of \"calculations\" in Arabic is محاسبة (accounting).", correctAnswer: "FALSE", score: 2, hint: "معنى \"calculations\" هو (حسابات/عمليات رياضية)؛ بينما المحاسبة كمهنة وعلم هي \"accounting\"." },
+
+            { id: 45, question: "The structure of this statement is correct: \"I saw Ali while he was walking to the bus station\".", correctAnswer: "TRUE", score: 2, hint: "الهيكل النحوي سليم، حيث جاء الماضي المستمر بعد أداة الربط while وقبلها الحدث القاطع بالماضي البسيط." },
+
+            { id: 46, question: "The adverb of the word \"lone\" is \"lonely\".", correctAnswer: "FALSE", score: 2, hint: "كلمة \"lonely\" هي صفة (Adjective) تعني وحيد أو يشعر بالوحدة وليست ظرفاً." },
+
+            { id: 47, question: "Smocking is not an addiction.", correctAnswer: "TRUE", score: 2, hint: "كلمة \"Smocking\" (بحرف c) تعني كشكشة ثياب وفن الخياطة، وهي ليست التدخين \"Smoking\"، لذا العبارة صحيحة." },
+
+            { id: 48, question: "smoking is not an addiction.", correctAnswer: "FALSE", score: 2, hint: "التدخين \"smoking\" (بدون c) ممارسة تسبب الإدمان نظراً لاحتواء التبغ على النيكوتين." },
+
+            { id: 49, question: "The meaning of (approve) is not to say good.", correctAnswer: "FALSE", score: 2, hint: "فعل \"approve\" يعني يوافق أو يرتضي وهو تقييم الشيء بأنه مناسب أو حسن." },
+
+            { id: 50, question: "The plural form of the noun 'man' is 'mans'.", correctAnswer: "FALSE", score: 2, hint: "جمع كلمة 'man' هو جمع شاذ وهو 'men' وليس بإضافة s." },
+
+            { id: 51, question: "The prefix of the word 'formal' is 'unformal'.", correctAnswer: "FALSE", score: 2, hint: "البادئة الصحيحة لعكس كلمة 'formal' هي 'informal' وليس 'unformal'." },
+
+            { id: 52, question: "The past form of the verb 'catch' is 'catched'.", correctAnswer: "FALSE", score: 2, hint: "الفعل 'catch' شاذ وماضيه هو 'caught' وليس 'catched'." },
+
+            { id: 53, question: "The spelling of the word معلومات is inform.", correctAnswer: "FALSE", score: 2, hint: "كلمة معلومات هي \"information\"؛ بينما \"inform\" فعل بمعنى يخبر." },
+
+            { id: 54, question: "The opposite of (strong) is powerful.", correctAnswer: "FALSE", score: 2, hint: "كلمتا (strong) و (powerful) مترادفتان، والضد هو (weak) ضعيف." },
+
+            { id: 55, question: "I don't like a lot of salt on my food, (I add a few salt to it) is correct statement.", correctAnswer: "FALSE", score: 2, hint: "الملح غير معدود فيأخذ \"a little\" وليس \"a few\"." },
+
+            { id: 56, question: "the meaning of (motionless) is still.", correctAnswer: "TRUE", score: 2, hint: "معنى (motionless) (بلا حراك) هو ساكن وهادئ \"still\"." },
+
+            { id: 57, question: "(By tomorrow, you will have been here for 3 weeks) is having correct future perfect tense.", correctAnswer: "TRUE", score: 2, hint: "الزمن المستخدم هو المستقبل التام المستمر وهو مصاغ بشكل سليم." },
+
+            { id: 58, question: "the opposite of a live is ugly.", correctAnswer: "FALSE", score: 2, hint: "ضد كلمة \"alive\" (على قيد الحياة) هو \"dead\" (ميت)، وضد \"ugly\" هو \"beautiful\"." },
+
+            { id: 59, question: "Alexander Graham bell invented mobile in 1876.", correctAnswer: "FALSE", score: 2, hint: "اخترع غراهام بيل الهاتف الأرضي السلكي \"telephone\" وليس المحمول \"mobile phone\"." },
+
+            { id: 60, question: "Alexander Graham bell invention phone in 1876.", correctAnswer: "FALSE", score: 2, hint: "البناء اللغوي للجملة ركيك لاستخدام الاسم \"invention\" بدلاً من الفعل \"invented\"." },
+
+            { id: 61, question: "Alexander Graham bell invented telephone in 1876.", correctAnswer: "TRUE", score: 2, hint: "بالفعل، اخترع ألكسندر غراهام بيل الهاتف في عام 1876." },
+
+            { id: 62, question: "tobacco smoke contains useful substances such as carbon, monoxide, tar and nicotine.", correctAnswer: "FALSE", score: 2, hint: "النيكوتين والقطران وأول أكسيد الكربون مواد ضارة وسامة وليست مفيدة (useful)." },
+
+            { id: 63, question: "the past form of the verb (be) is was / where.", correctAnswer: "TRUE", score: 2, hint: "صيغة الماضي لـ be هي was للمفرد و were للجمع (العبارة المكتوبة بها خطأ إملائي بسيط حيث كُتبت where بدلاً من were ولكنها قواعدياً صحيحة كفكرة)." },
+
+            { id: 64, question: "the translating of (ما اسمك) هو what is yours.", correctAnswer: "FALSE", score: 2, hint: "الترجمة الصحيحة هي \"What is your name?\" وليست \"What is yours\"." },
+
+            { id: 65, question: "the adjective of the word courage is couraging.", correctAnswer: "FALSE", score: 2, hint: "الصفة من كلمة شجاعة \"courage\" هي شجاع \"courageous\"." },
+
+            { id: 66, question: "the meaning of minicomputer is كمبيوتر كبير نسبياً (a relatively big computer).", correctAnswer: "FALSE", score: 2, hint: "البادئة \"mini\" تدل على الصغر، فحاسوب \"minicomputer\" هو حاسوب صغير نسبياً." },
+
+            { id: 67, question: "The meaning of minicomputer is كمبيوتر صغير نسبياً (a relatively small computer).", correctAnswer: "TRUE", score: 2, hint: "بالفعل، الـ \"minicomputer\" هو حاسوب أصغر حجماً من الحواسيب المركزية الكبيرة." },
+
+            { id: 68, question: "the meaning of manage is to run.", correctAnswer: "FALSE", score: 2, hint: "الفعل \"manage\" يعني يُدير ويُسيّر ويمكن قول \"run a business\"، ولكن بمفرده \"run\" تعني يركض." },
+
+            { id: 69, question: "sentence (my parents usually go shopping on Friday) it's correct.", correctAnswer: "TRUE", score: 2, hint: "الجملة صحيحة؛ فاعل جمع متبوع بالفعل المجرد وموقع ظرف التكرار سليم." },
+
+            { id: 70, question: "mobile phone are becoming very powerful in the field of that communication.", correctAnswer: "TRUE", score: 2, hint: "بالفعل، أصبحت الهواتف المحمولة وسائل قوية وفعالة جداً في مجال الاتصالات المتنوعة." },
+
+            { id: 71, question: "The plural of home is homes.", correctAnswer: "TRUE", score: 2, hint: "جمع كلمة \"home\" هو جمع منتظم بإضافة حرف s ليصبح \"homes\"." },
+
+            { id: 72, question: "(My brother goes to Qatar last week) is correct sentence.", correctAnswer: "FALSE", score: 2, hint: "بما أن الجملة تحتوي على دلالة الماضي \"last week\" فيجب صياغة الفعل بالماضي البسيط \"went\" وليس \"goes\"." },
+
+            { id: 73, question: "People can achieve perfection in their moral life by following the prophets.", correctAnswer: "TRUE", score: 2, hint: "تقتدي البشرية بسير الأنبياء لبلوغ مكارم وكمال الأخلاق والصفات الإنسانية." },
+
+            { id: 74, question: "Pollution means things that make things dirty.", correctAnswer: "TRUE", score: 2, hint: "التلوث يعني حرفياً إدخال عناصر تجعل البيئة والوسط المحيط متسخاً أو ضاراً." }
+
+        ];
+
+        // QUIZ 2: Multiple Choice - Single Choice (67 questions)
+
+        const db_quiz2 = [
+
+            { id: 1, question: "Travels have great effects on?", options: ["station", "robot", "brain", "memory"], correctAnswer: "memory", hint: "السفر لديه تأثير كبير على: محطة، ربوت (آلي)، الدماغ، الذاكرة" },
+
+            { id: 2, question: "I watch T.V every......", options: ["bright", "light", "night", "right"], correctAnswer: "night", hint: "أنا أشاهد التلفاز كل: ساطع، ضوء، ليلة، يمين" },
+
+            { id: 3, question: "The Yemeni government does everything to...... education", options: ["sells", "teaches", "develop", "study"], correctAnswer: "develop", hint: "الحكومة اليمنية تعمل كل شيء من أجل تطوير التعليم: بيع، تعليم، تطوير، دراسة" },
+
+            { id: 4, question: "They...... our school yesterday", options: ["to visit", "visiting", "visited", "visit"], correctAnswer: "visited", hint: "هم زاروا مدرستنا أمس: كي يزوروا، زيارة، زاروا، يزورون" },
+
+            { id: 5, question: "She asked me to...... her in the office", options: ["mate", "meeting", "meet", "meat"], correctAnswer: "meet", hint: "هي طلبت مني أن التقي بها في المكتب: رفيق، لقاء، أن التقي، لحم" },
+
+            { id: 6, question: "Ali...... his homework every day", options: ["do", "done", "does", "did"], correctAnswer: "does", hint: "علي يعمل واجباته المنزلية كل يوم: يعمل، عمل، يعمل، عمل" },
+
+            { id: 7, question: "Jiblah is the ...... city in Yemen", options: ["aid", "old", "oldest", "older"], correctAnswer: "oldest", hint: "جبلة هي الأقدم مدينة في اليمن: مساعدة، قديمة، الأقدم، أقدم" },
+
+            { id: 8, question: "It is also ...... than that of al-Nisaa", options: ["longing", "longest", "longer", "long"], correctAnswer: "longer", hint: "هي أيضاً أطول من سورة النساء: شوق، الأطول، أطول، طويل" },
+
+            { id: 9, question: "What ...... the word 'sociology' mean?", options: ["done", "do", "does", "did"], correctAnswer: "does", hint: "ما العامل المساعد الذي يأتي في الجملة What ... the word 'sociology' mean? : (done, do, does, did)" },
+
+            { id: 10, question: "Ali wants to ...... his English, so he practices as much as he can.", options: ["teach", "write", "improve", "test"], correctAnswer: "improve", hint: "علي يريد أن يطور اللغة الإنجليزية، لذا فهو يمارسها قدر استطاعته: تعليم، يكتب، يطور، اختبار" },
+
+            { id: 11, question: "Do you mind if I smoke ...... here?", options: ["a cigarette", "tents", "small farms", "gardens"], correctAnswer: "a cigarette", hint: "هل تمانع أن أدخن سيجارة هنا: سيجارة، خيام، مزارع صغيرة، حدائق" },
+
+            { id: 12, question: "I.......... sick yesterday. Today I am much better.", options: ["is", "were", "was", "am"], correctAnswer: "was", hint: "أنا كنت مريض بالأمس واليوم أنا أفضل بكثير: is، were، was، am" },
+
+            { id: 13, question: "The baby has ...... all this afternoon.", options: ["asleep", "sleeping", "slept", "sleep"], correctAnswer: "slept", hint: "الطفل كان نام طوال الظهيرة: نائم/نوم، نوم، نام، ينام" },
+
+            { id: 14, question: "He ...... the ball out of the window.", options: ["through", "threw", "nanoseconds", "microseconds"], correctAnswer: "threw", hint: "هو رمى الكرة خارج النافذة: خلالها، رمى، نانو ثانية، ميكروثانية" },
+
+            { id: 15, question: "Plastic pipes are ...... to a large water tank.", options: ["realized", "sniffed", "toppled", "connected"], correctAnswer: "connected", hint: "الأنانيب البلاستيكية متصلة بخزان مياه كبير: مدركة، شم، مقلوبة، متصلة" },
+
+            { id: 16, question: "Two students ...... two offices.", options: ["be", "had", "has", "have"], correctAnswer: "have", hint: "طالبان لديهما مكتبان: يكون، يستعمل للماضي، يستعمل مع he she it، لديهما (للجمع)" },
+
+            { id: 17, question: "He ...... homework every day.", options: ["do", "done", "does", "did"], correctAnswer: "does", hint: "هو يعمل واجبه المنزلي كل يوم: do، done، does، did" },
+
+            { id: 18, question: "Many tourists ........ Yemen.", options: ["vesting", "visitor", "visit", "visited"], correctAnswer: "visit", hint: "كثير من السياح يزورون اليمن: مستثمر، زائر، يزورون، زاروا" },
+
+            { id: 19, question: "We ........ not yet finished unit four.", options: ["finished", "finish", "have", "has"], correctAnswer: "have", hint: "نحن لم ننهِ بعد الوحدة الرابعة: انتهى، ينتهي، have، has" },
+
+            { id: 20, question: "The test tomorrow will have ten ....... words from other lessons.", options: ["more", "study", "write", "reduce"], correctAnswer: "more", hint: "سيحتوي الاختبار غداً على عشر كلمات إضافية من دروس أخرى: زيادة، دراسة، كتابة، تقليل" },
+
+            { id: 21, question: "We have......... in the previous lesson that studying has many advantages.", options: ["saw", "sea", "seen", "see"], correctAnswer: "seen", hint: "لقد رأينا في الدرس السابق أن الدراسة لها فوائد عديدة: رأينا في الماضي البسيط، البحر، رأينا (التصريف الثالث)، نرى" },
+
+            { id: 22, question: "Women of mount Sabir in Taiz...... famous for wearing brightly colored dresses with many gold ornaments.", options: ["were", "was", "are", "is"], correctAnswer: "are", hint: "نساء جبل صبر في تعز كن مشهورات بارتداء الملابس: كانوا، كان، يكونوا (للجمع)، تكون (للمفرد)" },
+
+            { id: 23, question: "Visitors to Yemen........ charmed by the various attractions in the country.", options: ["were", "was", "are", "is"], correctAnswer: "are", hint: "الزائرون إلى اليمن مفتونون بالمعالم السياحية المتنوعة: كانوا، كان، يكونون (للجمع)، يكون (للمفرد)" },
+
+            { id: 24, question: "The opposite meaning of the word 'light' is...", options: ["dark", "shout", "a small animal", "fly"], correctAnswer: "dark", hint: "المعنى المعاكس لكلمة \"نور\" هو ظلام: ظلام، صراخ، حيوان صغير، ذبابه" },
+
+            { id: 25, question: "He was born ...... 15th March.", options: ["at", "about", "in", "on"], correctAnswer: "on", hint: "ولد في 15 مارس: at، about Perk, in, on" },
+
+            { id: 26, question: "I come to school by ......", options: ["bust", "buss", "bus", "boss"], correctAnswer: "bus", hint: "أنا آتي إلى المدرسة بواسطة باص: bust، buss، باص، مدير" },
+
+            { id: 27, question: "The value of the plane ..... in the speed.", options: ["least", "lied", "lies", "lie"], correctAnswer: "lies", hint: "قيمة الطائرة تكمن في السرعة: الأقل، كذب، تكمن، يكذب" },
+
+            { id: 28, question: "Parents ...... their children from danger", options: ["develop", "keep away", "give an education", "provide"], correctAnswer: "keep away", hint: "الآباء يحفظون بعيدا أبنائهم من الخطر: يطورون، يحفظون بعيدا، يقدمون التعليم، يوفرون" },
+
+            { id: 29, question: "Yemen is ...... for its historic cities", options: ["knows", "knowing", "known", "know"], correctAnswer: "known", hint: "اليمن معروف بمواقعها التاريخية: يعرف، المعرفة، معروف، يعرف" },
+
+            { id: 30, question: "The word 'information' means", options: ["knowledge or give data", "tasted", "smelled", "smoked"], correctAnswer: "knowledge or give data", hint: "كلمة \"معلومات\" تعني معرفة أو إعطاء بيانات: معرفة أو إعطاء بيانات، تذوق، شم، دخن" },
+
+            { id: 31, question: "Yemen .... a historical and cultural open museum with many spots to visit", options: ["continue", "constituting", "constitutes", "constitute"], correctAnswer: "constitutes", hint: "اليمن تشكل متحف تاريخي وثائقي مفتوح: تستمر، تشكيل، تشكل، تشكل" },
+
+            { id: 32, question: "They have not yet ........ Unit four", options: ["to finish", "finishing", "finished", "finish"], correctAnswer: "finished", hint: "لم ينتهوا بعد الوحدة الرابعة: لإنهاء، انتهاء، ينتهوا (التصريف الثالث)، ننتهي" },
+
+            { id: 33, question: "the test tomorrow will have 10 ...... extra words from other lessons", options: ["more", "less", "easy", "difficult"], correctAnswer: "more", hint: "سيحتوي الاختبار غداً على 10 كلمات أكثر من دروس أخرى: أكثر، أقل، سهلة، صعبة" },
+
+            { id: 34, question: "The car ...... an electronic machine", options: ["has", "was", "is", "are"], correctAnswer: "is", hint: "السيارة هي آلة إلكترونية: has، was، is، are" },
+
+            { id: 35, question: "You often watch TV ......?", options: ["should you", "didn't you", "don't you", "doesn't you"], correctAnswer: "don't you", hint: "أنت غالباً تشاهد التلفاز، أليس كذلك؟: should you، didn't you، don't you، doesn't you" },
+
+            { id: 36, question: "Telephone companies use computers to ......", options: ["Organize telephone calls", "Assist telephone operators in their work", "Make communications faster and easier", "(Have less employment people)"], correctAnswer: "Make communications faster and easier", hint: "شركات الاتصالات تستخدم أجهزة الحاسوب لأجل جعل التواصل سهل وسريع" },
+
+            { id: 37, question: "Yemen ...... pride is wearing Jambia as a sign of manhood and bravery", options: ["take", "took", "takes", "Taked"], correctAnswer: "takes", hint: "اليمن يأخذ فخره في ارتداء الجنبية: يأخذ، أخذ، يأخذ (بإضافة s)، Taked" },
+
+            { id: 38, question: "The boys were using...... own car", options: ["your", "their", "her", "his"], correctAnswer: "their", hint: "كان الأولاد يستخدمون سيارتهم الخاصة: سيارتك، سيارتهم، سيارتها، سيارته" },
+
+            { id: 39, question: "A teacher...... a great effect on education", options: ["was", "had", "have", "has"], correctAnswer: "has", hint: "المعلم لديه تأثير كبير على التعليم: was، had، have، has" },
+
+            { id: 40, question: "The similar meaning of the word 'relief' is", options: ["confirm", "belief", "free", "comfort"], correctAnswer: "comfort", hint: "المعنى المماثل لكلمة \"راحة\" هو راحة: تأكيد، إيمان، حر، راحة" },
+
+            { id: 41, question: "The phrasal verb 'look after' means", options: ["inquire", "try to find", "appear", "take care of"], correctAnswer: "take care of", hint: "الفعل المركب \"اعتنى\" يعني اعتنى ب: استفسر، حاول أن يجد، ظهر، اعتنى ب" },
+
+            { id: 42, question: "What was Sameer's ........ when you told him the happy news?", options: ["wise", "reaction", "knocked", "stood"], correctAnswer: "reaction", hint: "ماذا كان رد فعل سمير عندما أخبرته بالخبر السعيد؟: بشكل حكيم، رد فعل، طرق الباب، وقف" },
+
+            { id: 43, question: "The part that can do the actual work", options: ["not known yet", "the well work", "about the use of a fingertip", "the ability of worker"], correctAnswer: "about the use of a fingertip", hint: "الجزء الذي يمكنه القيام بالعمل الفعلي هو استخدام أطراف الأصابع" },
+
+            { id: 44, question: "The airhostess in airline offices is used to", options: ["control aero planes' flights", "order seats on planes", "record information about passengers", "arrange the activities of airline"], correctAnswer: "record information about passengers", hint: "تعمل المضيفة الجوية في مكاتب الخطوط الجوية على تسجيل معلومات الركاب" },
+
+            { id: 45, question: "Today banks ........", options: ["can do all of kinds exchanging money", "are used for business only", "are used for terrible purposes only", "are large and fast in transferring money"], correctAnswer: "can do all of kinds exchanging money", hint: "اليوم أصبحت البنوك يمكنها القيام بجميع أنواع تبادل الأموال" },
+
+            { id: 46, question: "Tobacco smoke ...... harmful substances such as carbon monoxide, tar and nicotine", options: ["contains", "contain", "contained", "containing"], correctAnswer: "contains", hint: "دخان التبغ يحتوي مواد ضارة: يحتوي على، contain، contained، containing" },
+
+            { id: 47, question: "The glass toppled ........ of the shelf and broke", options: ["stood", "fell", "above", "knocked"], correctAnswer: "fell", hint: "الزجاج سقط من على الرف وتحطم: وقف، سقط، فوق، طرق الباب" },
+
+            { id: 48, question: "A diamond is a gem", options: ["glass", "jewel", "quartz", "necklace"], correctAnswer: "jewel", hint: "الألماس هو جوهرة: زجاج، جوهرة، كوارتز، قلادة" },
+
+            { id: 49, question: "He was born ...... 14th march", options: ["on", "at", "in", "off"], correctAnswer: "on", hint: "ولد في الرابع عشر من شهر مارس: on، at، in، off" },
+
+            { id: 50, question: "The criminal tried to flee from the police officer", options: ["runaway", "fly", "a small animal", "shout"], correctAnswer: "runaway", hint: "حاول المجرم الهروب من ضابط الشرطة: هروب، ذبابه، حيوان صغير، صراخ" },
+
+            { id: 51, question: "Marib is ...... famous historical site in Yemen", options: ["the most", "more", "much", "so much"], correctAnswer: "the most", hint: "مأرب هي الأكثر شهرة كموقع تاريخي في اليمن: الأكثر، أكثر، كمية، تلك كثيراً" },
+
+            { id: 52, question: "Human beings can talk but animals cannot", options: ["people", "plants", "cats", "babies"], correctAnswer: "people", hint: "الإنسان يمكنه الكلام لكن الحيوانات لا يمكنها: الناس، النباتات، القطط، الأطفال" },
+
+            { id: 53, question: "The woman sniffed the air and knew something was burning", options: ["smoked", "listened to", "smelled", "tasted"], correctAnswer: "smelled", hint: "المرأة استنشقت الهواء وعرفت أن شيئًا يحترق: دخنت، سمعت، شمت، تذوقت" },
+
+            { id: 54, question: "Modern mobiles .... the capacity to conduct video conferencing online tutoring and learning.", options: ["have", "has", "had", "be"], correctAnswer: "have", hint: "الهواتف المحمولة الحديثة تملك القدرة على إجراء مؤتمرات الفيديو: have، has، had، be" },
+
+            { id: 55, question: "Yemen produces coffee, Japan produces cars, and Kuwait produces oil.", options: ["plans", "makes/takes out of ground", "grow", "builds"], correctAnswer: "makes/takes out of ground", hint: "اليمن تنتج القهوة، اليابان تصنع السيارات، والكويت تستخرج النفط" },
+
+            { id: 56, question: "Rasulid schools and mosques are the .... beautiful places in Yemen.", options: ["more than", "more", "most", "(much)"], correctAnswer: "most", hint: "المدارس الرسولية والمساجد هي الأكثر جمالاً في اليمن: أكثر من، زيادة، الأكثر، كمية" },
+
+            { id: 57, question: "The computer is the most important invention next to ....", options: ["farming", "writing", "glass", "Engine"], correctAnswer: "Engine", hint: "الكمبيوتر هو الاختراع الأكثر أهمية بعد المحرك: الزراعة، الكتابة، الزجاج، المحرك" },
+
+            { id: 58, question: "Computers will soon affect ....", options: ["The lives of everyone", "The population of developed countries", "People in large cities", "The western worlds"], correctAnswer: "The lives of everyone", hint: "الكمبيوتر قريباً سيؤثر على حياة الجميع" },
+
+            { id: 59, question: "If I .... enough money, I would have gone with you.", options: ["have", "had", "has", "be"], correctAnswer: "had", hint: "لو كان لدي مال كاف، لكنت سأذهب معك: have، had، has، be" },
+
+            { id: 60, question: "a doctor can explain ....", options: ["what is wrong with the computer", "how calculations are done", "what is wrong with the patient", "why computers are accurate"], correctAnswer: "what is wrong with the patient", hint: "يمكن للطبيب أن يشرح ما المشكلة مع المريض" },
+
+            { id: 61, question: "many poor families live in huts outside third world cities.", options: ["small farms", "tents", "small badly built homes", "gardens"], correctAnswer: "small badly built homes", hint: "تعيش العديد من الأسر الفقيرة في أكواخ: مزارع صغيرة، خيام، منازل صغيرة مبنية بشكل سيئ" },
+
+            { id: 62, question: "Last night I was doing my homework when it so .... to rain heavily.", options: ["begun", "began", "begin", "beginning"], correctAnswer: "began", hint: "كنت أقوم بواجباتي المدرسية ليلة أمس عندما بدأت تمطر بغزارة: التصريف الثالث، بدأت، ابدأ، البداية" },
+
+            { id: 63, question: "I realize what Ali wants to say. realize means:", options: ["make real", "understand", "apologize", "claim"], correctAnswer: "understand", hint: "أنا أدرك ما يريد علي قوله. realize تعني: يجعله حقيقياً، يفهم، الاعتذار، المطالبة" },
+
+            { id: 64, question: "The phrasal verb 'look like' means ....", options: ["go for", "run away", "appear like", "make order"], correctAnswer: "appear like", hint: "الفعل المركب 'look like' (يبدو وكأنه) يعني الظهور وكأنه" },
+
+            { id: 65, question: "Ali wants to ...... his English, so he practices as much as he can.", options: ["teach", "write", "improve", "test"], correctAnswer: "improve", hint: "علي يريد أن يطور اللغة الإنجليزية لذا فهو يمارسها: يعلم، يكتب، يطور، اختبار" },
+
+            { id: 66, question: "I always ........ the shopping.", options: ["done", "did", "do", "does"], correctAnswer: "do", hint: "أنا دائماً أقوم بالتسوق: done، did، do، does" },
+
+            { id: 67, question: "Computers that stores informatin have", options: ["station", "robbed", "brain", "memory"], correctAnswer: "memory", hint: "أجهزة الكمبيوتر التي تخزن المعلومات لديها: ذاكرة، دماغ، مسروقة، محطة" }
+
+        ];
+
+        // QUIZ 3: Multiple Choice - Multiple Answers (63 questions)
+
+        const db_quiz3 = [
+
+            { id: 1, question: "The same phrasal verb of 'get away' is", options: ["go away", "go on", "escape", "lost"], correct: ["go away", "escape"], translation: "الفعل المركب لـ 'get away' (ابتعد) هو (اذهب بعيداً - استمر - اهرب - ضائع)" },
+
+            { id: 2, question: "The opposite meaning of the word female is", options: ["male", "girl", "man", "masculine"], correct: ["masculine", "male"], translation: "المعنى المعاكس لكلمة أنثى (female) هو (ذكر - فتاة - رجل - مذكر)" },
+
+            { id: 3, question: "opposite of the word 'above' is", options: ["beneath", "below", "deny", "proud"], correct: ["beneath", "below"], translation: "عكس كلمة 'above' (فوق) هو (تحت - أسفل - ينكر - فخور)" },
+
+            { id: 4, question: "The meaning of 'remarkable' is", options: ["interesting", "attention", "wonderful", "splendid"], correct: ["wonderful", "splendid"], translation: "معنى كلمة 'remarkable' (رائع/بارز) هو (مثير للاهتمام - رائع - مذهل)" },
+
+            { id: 5, question: "I....... nice pictures yesterday", options: ["paints", "painted", "painting", "did not paint"], correct: ["did not paint", "painted"], translation: "أنا ....... صوراً جميلة أمس (أرسم - رسمت - أرسم - لم أرسم)" },
+
+            { id: 6, question: "What is the meaning of 'improve' in this sentence: 'Ali wants to improve his English...'", options: ["study", "Develop", "Be excellent", "test"], correct: ["Be excellent", "Develop"], translation: "ما معنى تحسين في الجملة (دراسة - تطوير - أن يكون ممتازاً - اختبار)" },
+
+            { id: 7, question: "The same meaning of the word 'powerful' is......", options: ["strong", "influential", "hand", "give"], correct: ["strong", "influential"], translation: "نفس معنى كلمة 'powerful' (قوي/مؤثر) هو (قوي - ذو نفوذ)" },
+
+            { id: 8, question: "The exact meaning of 'hold off' is", options: ["stay away", "has not studies", "be delayed", "has changed"], correct: ["stay away", "be delayed"], translation: "المعنى الدقيق لـ 'hold off' (تأجيل/الابتعاد) هو (ابتعد - تأخر)" },
+
+            { id: 9, question: "I ...... university students, and my brother .... too", options: ["am", "back", "next", "is"], correct: ["is", "am"], translation: "أنا ........ طالب جامعي وأخي ..... أيضاً (يستخدم الأفعال المساعدة المناسبة للضمائر)" },
+
+            { id: 10, question: "The meaning of 'get rid of' is", options: ["provide", "remove", "develop", "become free from"], correct: ["remove", "become free from"], translation: "معنى 'get rid of' (يتخلص من) هو (إزالة - التحرر من)" },
+
+            { id: 11, question: "The same phrasal verb of 'get on' is", options: ["move back", "continue working", "get back", "succeed"], correct: ["continue working", "succeed"], translation: "نفس معنى 'get on' (يستمر/ينجح) هو (الاستمرار في العمل - النجاح)" },
+
+            { id: 12, question: "The same meaning of the word 'get back' is...........", options: ["return", "test", "provide", "move back"], correct: ["return", "move back"], translation: "نفس معنى كلمة 'get back' (يرجع) هو (يعود - يتراجع للخلف)" },
+
+            { id: 13, question: "The opposite meaning of the word 'accept' is", options: ["decline", "agree", "reject", "modern"], correct: ["decline", "reject"], translation: "المعنى المعاكس لكلمة 'accept' (يقبل) هو (يرفض - يرد)" },
+
+            { id: 14, question: "The same meaning of the word 'uniqueness' is", options: ["being rare", "counting", "unusual", "join"], correct: ["being rare", "unusual"], translation: "نفس معنى كلمة 'uniqueness' (تميز/تفرد) هو (كونه نادراً - غير عادي)" },
+
+            { id: 15, question: "The meaning of expensive is ..........", options: ["high in price", "value", "high in cost", "involving money"], correct: ["high in price", "high in cost"], translation: "معنى 'expensive' (غالٍ) هو (مرتفع السعر - مرتفع التكلفة)" },
+
+            { id: 16, question: "\"Ali has worn his new clothes\"", options: ["has got on", "has moved", "has covered", "has changed"], correct: ["has covered", "has got on"], translation: "علي 'ارتدى' ملابسه الجديدة (ارتدى - غطى)" },
+
+            { id: 17, question: "Opposite of 'accept' is", options: ["reject", "make real", "decline", "beneath"], correct: ["decline", "reject"], translation: "عكس كلمة القبول هو (يرفض - ينحسر/يرفض)" },
+
+            { id: 18, question: "The meaning of the word 'wonderful' in Arabic is", options: ["مدهش", "يتذوق", "رائع", "مستعمل"], correct: ["رائع", "مدهش"], translation: "معنى كلمة 'wonderful' في العربية هو (رائع - مدهش)" },
+
+            { id: 19, question: "..... Can talk, but animals cannot", options: ["plants", "people", "cats", "human beings"], correct: ["people", "human beings"], translation: "..... يمكنهم التحدث، لكن الحيوانات لا تستطيع ذلك (الناس - البشر)" },
+
+            { id: 20, question: "The word 'get on' means", options: ["go on", "confine", "continue", "decorate"], correct: ["continue", "go on"], translation: "كلمة 'get on' تعني (يستمر - يمضي قدماً)" },
+
+            { id: 21, question: "The meaning of charmed means", options: ["enjoyable", "nice", "very attractive", "usual"], correct: ["very attractive", "enjoyable"], translation: "معنى كلمة 'charmed' (مفتون/مبتهج) يعني (ممتع - جذاب للغاية)" },
+
+            { id: 22, question: "What is the meaning of 'marvelous' in this sentence: 'Yemen has marvelous old forts'", options: ["wonderful", "awful", "beautiful", "large"], correct: ["wonderful", "beautiful"], translation: "ما معنى كلمة 'marvelous' (رائع/خلاب) في هذه الجملة (رائع - جميل)" },
+
+            { id: 23, question: "To 'harm' means", options: ["wrong doing", "saying bad", "Damage", "send"], correct: ["wrong doing", "Damage"], translation: "تعني كلمة 'harm' (يضر) (القيام بفعل خاطئ - إتلاف/ضرر)" },
+
+            { id: 24, question: "Modern houses are ....... than old houses", options: ["attractive", "more beautiful", "more attractive", "very attractive"], correct: ["more beautiful", "more attractive"], translation: "البيوت الحديثة. ....... من البيوت القديمة (أجمل - أكثر جاذبية)" },
+
+            { id: 25, question: "To 'abuse' means to", options: ["misuse", "misunderstand", "misapply", "prevent"], correct: ["misuse", "misapply"], translation: "تعنى كلمة 'abuse' (يسيء استخدام) (إساءة الاستعمال - سوء التطبيق)" },
+
+            { id: 26, question: "The same meaning of the word 'keep on' is", options: ["stop", "go on", "continue", "think on"], correct: ["go on", "continue"], translation: "نفس معنى كلمة 'keep on' (يستمر) هو (يمضي قدماً - يواصل)" },
+
+            { id: 27, question: "to 'deliver' means to", options: ["offer", "present", "have", "utter"], correct: ["present", "offer"], translation: "'deliver' (يسلم/يقدم) يعني (يعرض - يقدم)" },
+
+            { id: 28, question: "I told him to........ The gift", options: ["take", "process", "accept", "except"], correct: ["accept", "take"], translation: "قلت له أن .......... الهدية (يقبل - يأخذ)" },
+
+            { id: 29, question: "You ....... these doors", options: ["must shut", "have to shut", "has to shut", "should close"], correct: ["must shut", "should close"], translation: "أنت ......... هذه الأبواب (يجب إغلاق - ينبغي إغلاق)" },
+
+            { id: 30, question: "The opposite meaning the word 'arrive' is", options: ["leave", "reach", "depart", "come"], correct: ["leave", "depart"], translation: "المعنى المعاكس لكلمة 'arrive' (يصل) هو (يغادر - يرحل)" },
+
+            { id: 31, question: "The meaning of escape is", options: ["to observe life", "the living behavior", "go away", "run away"], correct: ["run away", "go away"], translation: "معنى الهروب هو (الابتعاد - الهروب جرياً)" },
+
+            { id: 32, question: "The meaning of the word wonderful is", options: ["very fine", "still", "great", "prevent"], correct: ["very fine", "great"], translation: "معنى كلمة 'wonderful' هو (ممتاز جداً - عظيم)" },
+
+            { id: 33, question: "the meaning of charmed means:", options: ["enjoyable", "nice", "very attractive", "usual"], correct: ["very attractive", "enjoyable"], translation: "معنى كلمة 'charmed' هو (جذاب للغاية - ممتع)" },
+
+            { id: 34, question: "Mohammed.... His homework every day:", options: ["write", "does not write", "wrote", "writes"], correct: ["does not write", "writes"], translation: "محمد ..... واجباته اليومية : (لا يكتب - يكتب كلاهما متوافق نحوياً للمضارع)" },
+
+            { id: 35, question: "The father..... his son a new car", options: ["will give", "will buy", "goes shopping", "must gives"], correct: ["will give", "will buy"], translation: "الأب ...... ابنه سيارة جديدة (سيعطي - سيشتري)" },
+
+            { id: 36, question: "the opposite meaning of the word 'allow' is", options: ["forbid", "permit", "prevent", "help"], correct: ["forbid", "prevent"], translation: "المعنى المعاكس لكلمة 'allow' (يسمح) هو (يمنع - يحظر)" },
+
+            { id: 37, question: "The meaning of develop is", options: ["make", "thought", "grow", "terrible"], correct: ["make", "grow"], translation: "معنى التطور والنمو هو (صنع/إنشاء - ينمو)" },
+
+            { id: 38, question: "The Yemeni government does everything to ....... education", options: ["develop", "mentioned", "encourage", "done"], correct: ["develop", "encourage"], translation: "الحكومة اليمنية تفعل كل ما في وسعها لتطوير وتشجيع التعليم" },
+
+            { id: 39, question: "The meaning of the word in Arabic 'huge' is", options: ["ضخم", "رائع", "معجزة", "كبير جدا"], correct: ["ضخم", "كبير جدا"], translation: "معنى كلمة 'huge' في اللغة العربية هو ضخم أو كبير جداً" },
+
+            { id: 40, question: "The phrasal verb get back means", options: ["return", "angry", "move back", "escape"], correct: ["move back", "return"], translation: "الفعل المركب get back يعني (يعود - يتراجع للخلف)" },
+
+            { id: 41, question: "I told her to ....... The gift", options: ["except", "accept", "manage", "agree"], correct: ["accept", "agree"], translation: "قلت لها أن ......... الهدية (تقبل - توافق على)" },
+
+            { id: 42, question: "the meaning of the word 'faith' in Arabic is", options: ["ايمان", "عبادة", "معتقد", "صلاة"], correct: ["ايمان", "معتقد"], translation: "معنى كلمة الإيمان والاعتقاد هو إيمان أو معتقد" },
+
+            { id: 43, question: "the opposite meaning of the word 'receive' is", options: ["send", "get", "submit", "replace"], correct: ["submit", "send"], translation: "المعنى المعاكس لكلمة 'receive' (يستلم) هو (يرسل - يرفع/يقدم)" },
+
+            { id: 44, question: "the nearest meaning of the word 'prohibit' is", options: ["forbid", "still", "hurt", "prevent"], correct: ["forbid", "prevent"], translation: "المعنى الأقرب لكلمة 'prohibit' (يحظر) هو (يمنع - يحرم)" },
+
+            { id: 45, question: "The same meaning of the word 'organize' is", options: ["order", "test", "provide", "plan"], correct: ["order", "plan"], translation: "نفس معنى كلمة 'organize' (يرتب/ينظم) هو (يرتب - يخطط)" },
+
+            { id: 46, question: "The opposite meaning of 'beautiful' is", options: ["nice", "ugly", "bad", "fresh"], correct: ["ugly", "bad"], translation: "المعنى المعاكس لـ 'beautiful' (جميل) هو (قبيح - سيء)" },
+
+            { id: 47, question: "to 'constitute' means", options: ["to form", "to confine", "to establish", "to decorate"], correct: ["to establish", "to form"], translation: "معنى كلمة 'constitute' (يُشكل/يؤسس) يعني (يؤسس - يُشكل)" },
+
+            { id: 48, question: "The teacher asked her ....... to her name on the paper", options: ["right", "write", "get", "record"], correct: ["record", "write"], translation: "طلبت منها المعلمة أن ......... اسمها على الورقة (تكتب - تسجل)" },
+
+            { id: 49, question: "What is the meaning of compulsory' in this sentence: 'education in Yemen is compulsory...'", options: ["must", "voluntary", "obligatory", "optional"], correct: ["must", "obligatory"], translation: "ما معنى كلمة إلزامي في هذه الجملة ؟ (إجباري - إلزامي)" },
+
+            { id: 50, question: "The meaning of the word 'atmosphere' in Arabic is", options: ["علاج", "بيئة", "مناخ", "يخفض"], correct: ["بيئة", "مناخ"], translation: "معنى كلمة 'atmosphere' في اللغة العربية هو بيئة أو مناخ" },
+
+            { id: 51, question: "The opposite of the word 'fail' is..........", options: ["Succeed", "Pass", "Block", "No marks"], correct: ["Succeed", "Pass"], translation: "عكس كلمة 'fail' (يفشل) هو (ينجح - يجتاز)" },
+
+            { id: 52, question: "The father. ....... his son a new car", options: ["Will give", "Will buy", "Goes shopping", "Must gives"], correct: ["Will give", "Will buy"], translation: "الأب ...... ابنه سيارة جديدة (سيعطي - سيشتري)" },
+
+            { id: 53, question: "We have seen in the........ reading text that the mobile phone has many advantages in all fields of life", options: ["Back", "Next", "earlier", "Previous"], correct: ["earlier", "Previous"], translation: "لقد رأينا في النص السابق/السالف الذكر أن للهاتف ميزات عديدة" },
+
+            { id: 54, question: "The opposite meaning of the word 'above' is", options: ["Beneath", "Below", "Over", "On top"], correct: ["Beneath", "Below"], translation: "المعنى المعاكس لكلمة 'above' هو (تحت - أسفل)" },
+
+            { id: 55, question: "The meaning of the word 'discuss' in Arabic is", options: ["يناقش", "يتذوق", "يتحدث عن", "مستعمل"], correct: ["يتحدث عن", "يناقش"], translation: "معنى كلمة 'discuss' بالعربية هو يتحدث عن أو يناقش" },
+
+            { id: 56, question: "What is the meaning of 'protect' in this sentence parents protect their children from danger", options: ["provide", "save", "develop", "keep away"], correct: ["save", "keep away"], translation: "ما معنى كلمة 'protect' (يحمي) في هذه الجملة (ينقذ/يحمي - يبعد عن الخطر)" },
+
+            { id: 57, question: "Did you .... the problem in the first question?", options: ["solve", "ask question about", "find the answer of", "experiment"], correct: ["solve", "find the answer of"], translation: "هل ....... المشكلة في السؤال الأول ؟ (حللت - أوجدت إجابة)" },
+
+            { id: 58, question: "The meaning of the word in Arabic 'addition' is", options: ["إضافة", "مأثور", "زيادة", "قصة"], correct: ["إضافة", "زيادة"], translation: "معنى كلمة addition في اللغة العربية هو إضافة أو زيادة" },
+
+            { id: 59, question: "The phrasal verb 'give way' means", options: ["escape", "break", "angry", "collapse"], correct: ["break", "collapse"], translation: "الفعل المركب give way يعني (ينكسر - ينهار)" },
+
+            { id: 60, question: "Opposite of the word ask is.......", options: ["answer", "deny", "reply", "proud"], correct: ["answer", "reply"], translation: "عكس كلمة اسأل هو الإجابة أو الرد" },
+
+            { id: 61, question: "The same phrasal verb of 'get off' is.......", options: ["to continue", "leave", "to return", "escape"], correct: ["leave", "escape"], translation: "مرادف الفعل المركب (get off) هو غادر أو هرب" },
+
+            { id: 62, question: "The meaning of attractive in English is", options: ["pleasant to look at", "beautiful", "dirty", "ugly"], correct: ["pleasant to look at", "beautiful"], translation: "معنى كلمة جذاب في اللغة الإنجليزية هو (جميل - ممتع للنظر إليه)" },
+
+            { id: 63, question: "what is the meaning of has left in this sentence Sameer is 18 years old but he has left school.", options: ["has gone away", "has changed", "has graduated", "has registered"], correct: ["has gone away", "has changed"], translation: "ما معنى 'ترك / غادر' في هذه الجملة سمير ترك المدرسة؟" }
+
+        ];
+
+        // QUIZ 4: Translation Free Text Input (41 questions)
+
+        const db_quiz4 = [
+
+            { id: 1, text: "It's better to watch the program on the TV.", direction: "English to Arabic", correct_ar: ["من الافضل مشاهدة البرنامج على التلفزيون"], partial_ar: ["مشاهدة البرنامج", "التلفزيون", "افضل"] },
+
+            { id: 2, text: "You might try taking some exercise, like walking.", direction: "English to Arabic", correct_ar: ["يمكنك محاولة ممارسة بعض التمارين الرياضية مثل المشي"], partial_ar: ["ممارسة بعض التمارين", "المشي", "محاولة"] },
+
+            { id: 3, text: "I don't like football very much.", direction: "English to Arabic", correct_ar: ["انا لا احب كرة القدم كثيرا"], partial_ar: ["لا احب", "كرة القدم"] },
+
+            { id: 4, text: "Stop smoking, it's injurious to health.", direction: "English to Arabic", correct_ar: ["اقلع عن التدخين فهو مضر بالصحة"], partial_ar: ["اقلع عن التدخين", "مضر بالصحة"] },
+
+            { id: 5, text: "I'd prefer a glass of juice to tea", direction: "English to Arabic", correct_ar: ["افضل كوبا من العصير على الشاي"], partial_ar: ["افضل كوب عصير", "على الشاي", "العصير", "الشاي"] },
+
+            { id: 6, text: "There are three types of education in Yemen namely; elementary, secondary, and academy.", direction: "English to Arabic", correct_ar: ["هناك ثلاثة مراحل للتعليم في اليمن وهي الابتدائي والثانوي والاكاديمي"], partial_ar: ["ثلاثة مراحل للتعليم", "الابتدائي والثانوي والاكاديمي", "في اليمن"] },
+
+            { id: 7, text: "This country produces coffee more than it needs.", direction: "English to Arabic", correct_ar: ["هذا البلد ينتج القهوة اكثر مما يحتاج", "ينتج هذا البلد من القهوة اكثر مما يحتاج"], partial_ar: ["ينتج القهوة", "اكثر مما يحتاج", "هذا البلد"] },
+
+            { id: 8, text: "Yemen imports cotton, sugar, tea and milk", direction: "English to Arabic", correct_ar: ["اليمن تستورد القطن, السكر, الشاي والحليب"], partial_ar: ["اليمن تستورد", "القطن", "السكر", "الشاي", "الحليب"] },
+
+            { id: 9, text: "Yemen exports great quantities of fish to Jordan", direction: "English to Arabic", correct_ar: ["اليمن تصدر كميات كبيرة من الاسماك الى الاردن"], partial_ar: ["اليمن تصدر", "كميات كبيرة", "الاسماك الى الاردن"] },
+
+            { id: 10, text: "I avoid sitting in public gardens", direction: "English to Arabic", correct_ar: ["اتجنب الجلوس في الحدائق العامة"], partial_ar: ["اتجنب", "الجلوس", "الحدائق العامة"] },
+
+            { id: 11, text: "You should tell your parents the truth", direction: "English to Arabic", correct_ar: ["يجب عليك ان تقول الحقيقة لوالديك"], partial_ar: ["يجب ان تقول", "الحقيقة لوالديك"] },
+
+            { id: 12, text: "You should tell the truth", direction: "English to Arabic", correct_ar: ["يجب عليك ان تقول الحقيقه"], partial_ar: ["يجب ان تقول", "الحقيقة"] },
+
+            { id: 13, text: "After having my breakfast, I put on my coat and drive to my work.", direction: "English to Arabic", correct_ar: ["بعد تناول الافطار ارتدي معطفي واتوجه بسيارتي الى العمل"], partial_ar: ["بعد تناول الافطار", "ارتدي معطفي", "اتوجه بسيارتي الى العمل"] },
+
+            { id: 14, text: "Who is the author of this coursework?", direction: "English to Arabic", correct_ar: ["من هو مؤلف هذا المقرر الدراسي"], partial_ar: ["من هو مؤلف", "المقرر الدراسي"] },
+
+            { id: 15, text: "Who is the author of this book?", direction: "English to Arabic", correct_ar: ["من هو مؤلف هذا الكتاب؟"], partial_ar: ["من هو مؤلف", "هذا الكتاب"] },
+
+            { id: 16, text: "Can you use the computer well /adequately?", direction: "English to Arabic", correct_ar: ["هل تستطيع ان تستعمل الكمبيوتر جيدا؟"], partial_ar: ["تستطيع ان تستعمل", "الكمبيوتر جيدا"] },
+
+            { id: 17, text: "It was not easy for me to make a decision, so I consulted my members of my family.", direction: "English to Arabic", correct_ar: ["لم يكن من السهل اتخاذ القرار، لذلك استشرت بعض افراد من اسرتي."], partial_ar: ["لم يكن من السهل اتخاذ القرار", "استشرت", "افراد من اسرتي"] },
+
+            { id: 18, text: "English is an international language because it's the language of commerce computer and medicine", direction: "English to Arabic", correct_ar: ["اللغه الانجليزيه لغه عالميه لانها لغه التجاره والكمبيوتر والطب"], partial_ar: ["اللغة الانجليزية لغة عالمية", "لغة التجارة والكمبيوتر والطب"] },
+
+            { id: 19, text: "Sana'a has changed and developed from a small city to a large modern city", direction: "English to Arabic", correct_ar: ["لقد تغيرت صنعاء وتطورت من مدينه صغيره الى مدينه حديثه"], partial_ar: ["تغيرت صنعاء وتطورت", "من مدينة صغيرة", "الى مدينة حديثة"] },
+
+            { id: 20, text: "An international Islamic conference about the middle East issue is expected to be held in the near future.", direction: "English to Arabic", correct_ar: ["من المتوقع عقد مؤتمر سلام دولي في المستقبل القريب حول ازمه الشرق الاوسط"], partial_ar: ["من المتوقع عقد مؤتمر", "المستقبل القريب", "ازمة الشرق الاوسط"] },
+
+            { id: 21, text: "Do you believe that war between states might stop?", direction: "English to Arabic", correct_ar: ["هل تعتقد ان الحروب ستتوقف بين الدول؟"], partial_ar: ["هل تعتقد", "الحروب ستتوقف", "بين الدول"] },
+
+            { id: 22, text: "Fast driving causes many traffic accidents.", direction: "English to Arabic", correct_ar: ["ان القيادة السريعة تسبب كثيرا من حوادث المرور"], partial_ar: ["القيادة السريعة", "تسبب", "حوادث المرور"] },
+
+            { id: 23, text: "College students have to learn to work hard.", direction: "English to Arabic", correct_ar: ["يجب على طلاب الجامعات ان يتعلموا العمل الجاد"], partial_ar: ["طلاب الجامعات", "ان يتعلموا العمل الجاد"] },
+
+            { id: 24, text: "The word (robot) is used to describe a mechanical person that works according to order.", direction: "English to Arabic", correct_ar: ["تستخدم كلمه روبوت لوصف الانسان الآلي الذي يعمل حسب الأوامر التي يتلقاها"], partial_ar: ["تستخدم كلمة روبوت", "لوصف الانسان الآلي", "حسب الأوامر"] },
+
+            { id: 25, text: "Fasting is one of the five pillars of Islam.", direction: "English to Arabic", correct_ar: ["الصيام هو احد اركان الاسلام الخمسه"], partial_ar: ["الصيام", "اركان الاسلام الخمسة"] },
+
+            { id: 26, text: "The careless boy has denied losing his book.", direction: "English to Arabic", correct_ar: ["الولد المهمل انكر فقدان كتابه"], partial_ar: ["الولد المهمل", "انكر فقدان كتابه"] },
+
+            { id: 27, text: "Flowers will be growing in our neighbour's garden.", direction: "English to Arabic", correct_ar: ["ستنمو الزهور في حديقه جيراننا"], partial_ar: ["ستنمو الزهور", "حديقة جيراننا"] },
+
+            { id: 28, text: "ينتج هذا البلد من القهوه اكثر مما يحتاج", direction: "Arabic to English", correct_en: ["This country produces coffee more than it needs."], partial_en: ["This country produces coffee", "more than it needs", "coffee"] },
+
+            { id: 29, text: "يجب ان تقول الحقيقة لوالديك", direction: "Arabic to English", correct_en: ["You should tell your parents the truth."], partial_en: ["You should tell", "your parents", "the truth"] },
+
+            { id: 30, text: "يجب ان تقول الحقيقه", direction: "Arabic to English", correct_en: ["You have to tell the truth.", "You should tell the truth."], partial_en: ["You have to tell", "the truth"] },
+
+            { id: 31, text: "اللغه الانجليزيه لغه عالميه", direction: "Arabic to English", correct_en: ["English language is an international language."], partial_en: ["English language", "international language"] },
+
+            { id: 32, text: "اتجنب الجلوس في الحدائق العامه", direction: "Arabic to English", correct_en: ["I avoid sitting in the public gardens."], partial_en: ["I avoid sitting", "public gardens"] },
+
+            { id: 33, text: "ان تدرس تنجح", direction: "Arabic to English", correct_en: ["If you study well, you will succeed."], partial_en: ["If you study", "you will succeed"] },
+
+            { id: 34, text: "هل تعرف كيف تطبع", direction: "Arabic to English", correct_en: ["Do you know how to type on the computer?"], partial_en: ["Do you know how to type", "on the computer"] },
+
+            { id: 35, text: "سالني المدير لماذا لم تاتي الى المدرسة يوم امس", direction: "Arabic to English", correct_en: ["The headmaster asked me; why didn't you come to school yesterday."], partial_en: ["The headmaster asked me", "why didn't you come", "school yesterday"] },
+
+            { id: 36, text: "ربما يعمل احمد في المزرعه الان", direction: "Arabic to English", correct_en: ["Ahmad might be working on the farm now."], partial_en: ["Ahmad might be working", "on the farm now"] },
+
+            { id: 37, text: "اذا اكلت كثيرا فقد تمرض", direction: "Arabic to English", correct_en: ["If you eat too much, you might get sick."], partial_en: ["If you eat too much", "you might get sick"] },
+
+            { id: 38, text: "من يستطيع ان يتكلم الفرنسيه", direction: "Arabic to English", correct_en: ["Who can speak French?"], partial_en: ["Who can speak", "French"] },
+
+            { id: 39, text: "ان سامي يستمتع بقراءه القصص", direction: "Arabic to English", correct_en: ["Sammy enjoys reading stories."], partial_en: ["Sammy enjoys", "reading stories"] },
+
+            { id: 40, text: "عليك بشراء تذكره حالما تصل الى المحطه", direction: "Arabic to English", correct_en: ["You have to buy a ticket as soon as you arrive at the station."], partial_en: ["You have to buy a ticket", "as soon as you arrive", "at the station"] },
+
+            { id: 41, text: "من هو مؤلف هذا الكتاب", direction: "Arabic to English", correct_en: ["Who is the author of this book?"], partial_en: ["Who is the author", "this book"] }
+
+        ];
+
+        // MASTER STATE CONTROL MODULE
+
+        const state = {
+
+            currentView: 'home', // 'home', 'quiz1', 'quiz2', 'quiz3', 'quiz4'
+
+            soundEnabled: true,
+
+            userAnswers: {
+
+                quiz1: {}, // id: { selectedValue, isCorrect }
+
+                quiz2: {}, // id: { selectedAnswer, isCorrect }
+
+                quiz3: {}, // id: { selectedOptions[], score }
+
+                quiz4: {}  // id: { text, score, checked }
+
+            },
+
+            // Active filters inside the loaded Quiz panel
+
+            activeQuizFilter: 'all',
+
+            activeQuizSearch: '',
+
+            activeQuizPage: 1,
+
+            activeQuizFocusedId: 1
+
+        };
+
+        const itemsPerPage = 10;
+
+        // Sound Synthesis (Web Audio API)
 
         function playSound(type) {
-            if (!soundEnabled) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
 
-            if (type === 'success') {
-                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.25);
-            } else if (type === 'fail') {
-                osc.frequency.setValueAtTime(293.66, audioCtx.currentTime); // D4
-                osc.frequency.setValueAtTime(220.00, audioCtx.currentTime + 0.15); // A3
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
+            if (!state.soundEnabled) return;
+
+            try {
+
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+                if (!AudioContext) return;
+
+                const ctx = new AudioContext();
+
+                
+
+                if (type === 'correct') {
+
+                    const osc = ctx.createOscillator();
+
+                    const gain = ctx.createGain();
+
+                    osc.type = 'sine';
+
+                    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+
+                    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
+
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+
+                    osc.connect(gain);
+
+                    gain.connect(ctx.destination);
+
+                    osc.start();
+
+                    osc.stop(ctx.currentTime + 0.35);
+
+                } else if (type === 'wrong') {
+
+                    const osc = ctx.createOscillator();
+
+                    const gain = ctx.createGain();
+
+                    osc.type = 'sawtooth';
+
+                    osc.frequency.setValueAtTime(180, ctx.currentTime); // G3 low buzz
+
+                    osc.frequency.linearRampToValueAtTime(120, ctx.currentTime + 0.3); 
+
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+
+                    osc.connect(gain);
+
+                    gain.connect(ctx.destination);
+
+                    osc.start();
+
+                    osc.stop(ctx.currentTime + 0.3);
+
+                } else if (type === 'confetti') {
+
+                    // Celebration fan-fare sound
+
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+
+                    notes.forEach((freq, idx) => {
+
+                        const osc = ctx.createOscillator();
+
+                        const gain = ctx.createGain();
+
+                        osc.type = 'triangle';
+
+                        osc.frequency.setValueAtTime(freq, ctx.currentTime + (idx * 0.08));
+
+                        gain.gain.setValueAtTime(0.08, ctx.currentTime + (idx * 0.08));
+
+                        gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + (idx * 0.08) + 0.4);
+
+                        osc.connect(gain);
+
+                        gain.connect(ctx.destination);
+
+                        osc.start(ctx.currentTime + (idx * 0.08));
+
+                        osc.stop(ctx.currentTime + (idx * 0.08) + 0.4);
+
+                    });
+
+                }
+
+            } catch (e) {
+
+                console.log('Audio Context issues: ', e);
+
             }
+
         }
 
         function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('sound-on-icon').classList.toggle('hidden', !soundEnabled);
-            document.getElementById('sound-off-icon').classList.toggle('hidden', soundEnabled);
-        }
-    </script>
 
-    <script>
-        // COMPREHENSIVE GENERATED QUESTIONS BANK
-        const quizDatabase = {
-            1: [], // True/False - 74 Questions
-            2: [], // MCQ Single - 67 Questions
-            3: [], // MCQ Multiple - 63 Questions
-            4: []  // Translation - 41 Questions
-        };
+            state.soundEnabled = !state.soundEnabled;
 
-        // Populate Quiz 1: True / False (74 items)
-        for(let i=1; i<=74; i++) {
-            let isTrue = i % 2 === 0;
-            quizDatabase[1].push({
-                id: i,
-                question: `Sentence or Rule analysis No. ${i}: The application of syntactic criteria or lexical choices in this structured framework represents a ${isTrue ? 'valid' : 'grammatically incorrect'} construction within contemporary English standard parameters.`,
-                translation: `العبارة أو القاعدة رقم ${i}: تطبيق المعايير النحوية أو الاختيارات اللفظية في هذا السياق يعد تركيباً ${isTrue ? 'صحيحاً' : 'خاطئاً'} لغوياً حسب القواعد المعيارية.`,
-                correct: isTrue ? "true" : "false"
-            });
-        }
+            const on = document.getElementById('sound-on-icon');
 
-        // Populate Quiz 2: MCQ Single Selection (67 items)
-        const mcqOptions = ["A) Standard Paradigm", "B) Alternative Syntax", "C) Erroneous Inflection", "D) Extraneous Element"];
-        for(let i=1; i<=67; i++) {
-            let correctIdx = (i % 4);
-            quizDatabase[2].push({
-                id: i,
-                question: `Identify the appropriate and grammatically consistent element to fill the structural gap in sentence template No. ${i}: "The core research matrix ________ strictly observed by all active operational entities."`,
-                translation: `حدد العنصر المناسب والمتناسق قواعدياً لملء الفراغ الهيكلي في الجملة رقم ${i}: "المصفوفة الأساسية للبحث المتبع يتم مراقبتها بدقة من كافة الجهات."`,
-                options: [...mcqOptions],
-                correct: correctIdx
-            });
-        }
+            const off = document.getElementById('sound-off-icon');
 
-        // Populate Quiz 3: MCQ Multiple Selection (63 items)
-        for(let i=1; i<=63; i++) {
-            quizDatabase[3].push({
-                id: i,
-                question: `Select all choices that qualify as morphologically valid, or syntactically correct variations for the technical expression No. ${i}:`,
-                translation: `اختر جميع الخيارات التي تعتبر صياغات صحيحة ومقبولة نحوياً للتعبير الفني والتركيبي رقم ${i}:`,
-                options: ["Option Alpha (Valid Entry)", "Option Beta (Valid Alternative)", "Option Gamma (Invalid Deviation)", "Option Delta (Defective Form)"],
-                correct: [0, 1] // Always first two options are correct for mathematical simulation
-            });
-        }
+            const btn = document.getElementById('sound-btn');
 
-        // Populate Quiz 4: Freeform Text Translation (41 items)
-        for(let i=1; i<=41; i++) {
-            let isEngToAr = i <= 27;
-            quizDatabase[4].push({
-                id: i,
-                type: isEngToAr ? 'en-ar' : 'ar-en',
-                question: isEngToAr ? `Translate into precise Arabic: "The implementation of innovative academic frameworks accelerates user learning curves significantly."` : `ترجم إلى الإنجليزية الفصيحة بدقة: "تسعى المنصة التعليمية الحديثة لتقديم تقييم تفاعلي فوري ومستدام لكافة الطلاب."`,
-                sampleAnswer: isEngToAr ? "تسهم كتابة الأطر الأكاديمية المبتكرة في تسريع مستويات التعلم بشكل ملحوظ" : "The modern educational platform seeks to provide immediate and sustainable interactive assessment for all students.",
-                matches: isEngToAr ? ["تسهم", "الأطر", "الأكاديمية", "المبتكرة"] : ["modern", "educational", "platform", "interactive", "assessment"]
-            });
-        }
+            if (state.soundEnabled) {
 
-        // Operational App States
-        let activeQuizId = 1;
-        let activeViewMode = 'page'; // 'one', 'page', 'all'
-        let activeFilter = 'all'; // 'all', 'unanswered', 'correct', 'wrong'
-        let currentPage = 1;
-        const itemsPerPage = 10;
-        let currentSingleQuestionIdx = 0; // for 'one' view mode
+                on.classList.remove('hidden');
 
-        // User Response Store (Backed by LocalStorage)
-        let userProgress = JSON.parse(localStorage.getItem('interactive_quiz_progress_2026')) || {
-            1: {}, 2: {}, 3: {}, 4: {}
-        };
+                off.classList.add('hidden');
 
-        function saveProgress() {
-            localStorage.setItem('interactive_quiz_progress_2026', JSON.stringify(userProgress));
-            calculateGlobalStats();
-        }
+                btn.className = "p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 text-slate-500 hover:text-indigo-600 transition-all shadow-sm";
 
-        // Navigation Engine
-        function navigateTo(screen) {
-            if (screen === 'home') {
-                document.getElementById('screen-home').classList.remove('hidden');
-                document.getElementById('screen-quiz-container').classList.add('hidden');
-                calculateGlobalStats();
             } else {
-                document.getElementById('screen-home').classList.add('hidden');
-                document.getElementById('screen-quiz-container').classList.remove('hidden');
+
+                on.classList.add('hidden');
+
+                off.classList.remove('hidden');
+
+                btn.className = "p-2.5 bg-rose-50 text-rose-500 rounded-xl border border-rose-200 transition-all shadow-sm";
+
             }
+
         }
 
-        function startQuiz(quizId) {
-            activeQuizId = quizId;
-            currentPage = 1;
-            currentSingleQuestionIdx = 0;
-            document.getElementById('quiz-search-input').value = '';
+        // CONFETTI SCREEN CELEBRATION
+
+        function triggerConfetti() {
+
+            playSound('confetti');
+
+            const canvas = document.getElementById('confetti-canvas');
+
+            const ctx = canvas.getContext('2d');
+
+            let particles = [];
+
+            const colors = ['#6366f1', '#a855f7', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
+
+            canvas.width = window.innerWidth;
+
+            canvas.height = window.innerHeight;
+
+            for (let i = 0; i < 160; i++) {
+
+                particles.push({
+
+                    x: Math.random() * canvas.width,
+
+                    y: Math.random() * canvas.height - canvas.height,
+
+                    size: Math.random() * 8 + 4,
+
+                    color: colors[Math.floor(Math.random() * colors.length)],
+
+                    speedX: Math.random() * 5 - 2.5,
+
+                    speedY: Math.random() * 6 + 3,
+
+                    rotation: Math.random() * 360,
+
+                    rotationSpeed: Math.random() * 4 - 2
+
+                });
+
+            }
+
+            function frame() {
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                let alive = false;
+
+                particles.forEach(p => {
+
+                    p.y += p.speedY;
+
+                    p.x += p.speedX;
+
+                    p.rotation += p.rotationSpeed;
+
+                    if (p.y < canvas.height) alive = true;
+
+                    ctx.save();
+
+                    ctx.translate(p.x, p.y);
+
+                    ctx.rotate(p.rotation * Math.PI / 180);
+
+                    ctx.fillStyle = p.color;
+
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+
+                    ctx.restore();
+
+                });
+
+                if (alive) {
+
+                    requestAnimationFrame(frame);
+
+                } else {
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                }
+
+            }
+
+            frame();
+
+        }
+
+        // NAVIGATION ENGINE
+
+        function navigateTo(viewName) {
+
+            state.currentView = viewName;
+
             
-            const metadata = {
-                1: { title: "الاختبار الأول: صح أم خطأ (True / False)", desc: "قم بتقييم العبارات واختيار الصحة أو الخطأ للحصول على نقطتين لكل سؤال." },
-                2: { title: "الاختبار الثاني: اختيار من متعدد (خيار واحد)", desc: "اختر الإجابة الصحيحة الوحيدة من بين أربعة بدائل متاحة بقيمة نقطتين." },
-                3: { title: "الاختبار الثالث: اختيار إجابات متعددة", desc: "انتبه! هذا النمط يطبق قاعدة الخطأ يأكل الصواب لتجنب العشوائية." },
-                4: { title: "الاختبار الرابع: اختبار الترجمة والتحرير الشامل", desc: "اكتب الترجمة اليدوية الفصيحة بدقة وسيتم تقييمها واحتساب نقاطها بذكاء." }
+
+            // Hide all screens first
+
+            document.getElementById('screen-home').classList.add('hidden');
+
+            document.getElementById('screen-quiz-container').classList.add('hidden');
+
+            // Reset active filters on every view swap
+
+            state.activeQuizFilter = 'all';
+
+            state.activeQuizSearch = '';
+
+            state.activeQuizPage = 1;
+
+            document.getElementById('quiz-search-input').value = '';
+
+            if (viewName === 'home') {
+
+                document.getElementById('screen-home').classList.remove('hidden');
+
+                updateDashboardStats();
+
+            } else {
+
+                document.getElementById('screen-quiz-container').classList.remove('hidden');
+
+                setupQuizEnvironment(viewName);
+
+            }
+
+            // Scroll to top
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        }
+
+        // Setup loaded Quiz Panel view
+
+        function setupQuizEnvironment(quizKey) {
+
+            const titleEl = document.getElementById('active-quiz-title');
+
+            const descEl = document.getElementById('active-quiz-desc');
+
+            
+
+            if (quizKey === 'quiz1') {
+
+                titleEl.textContent = "الاختبار الأول: صح أم خطأ (True / False)";
+
+                descEl.textContent = "راجع القواعد وصحح أخطاء الجمل الإنجليزية بالنقر على أحد الخيارين.";
+
+                state.activeQuizFocusedId = 1;
+
+            } else if (quizKey === 'quiz2') {
+
+                titleEl.textContent = "الاختبار الثاني: اختيار من متعدد - إجابة واحدة صحيحة";
+
+                descEl.textContent = "حدد الإجابة الأصح للجملة المطروحة من بين الخيارات الأربعة المتاحة.";
+
+                state.activeQuizFocusedId = 1;
+
+            } else if (quizKey === 'quiz3') {
+
+                titleEl.textContent = "الاختبار الثالث: اختيار من متعدد - إجابات متعددة";
+
+                descEl.textContent = "اختر الإجابات الصحيحة (درجتان للسؤال). تذكر: الإجابة الخاطئة تخصم من درجة الإجابة الصحيحة!";
+
+                state.activeQuizFocusedId = 1;
+
+            } else if (quizKey === 'quiz4') {
+
+                titleEl.textContent = "الاختبار الرابع: اختبار الترجمة والتحرير الشامل";
+
+                descEl.textContent = "اكتب الترجمة اليدوية المناسبة، وسنقوم بتقييم ترجمتك وتدريبك فوراً.";
+
+                state.activeQuizFocusedId = 1;
+
+            }
+
+            // Sync layout view buttons
+
+            updateViewModeUI();
+
+            
+
+            // Render Questions
+
+            applyActiveQuizFilters();
+
+            renderActiveGridNavigation();
+
+            syncActiveQuizHeaderStats();
+
+        }
+
+        function updateViewModeUI() {
+
+            const modes = ['one', 'page', 'all'];
+
+            const activeMode = getActiveViewMode();
+
+            modes.forEach(m => {
+
+                const btn = document.getElementById(`vmode-${m}`);
+
+                if (m === activeMode) {
+
+                    btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-indigo-700 shadow-sm";
+
+                } else {
+
+                    btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
+
+                }
+
+            });
+
+        }
+
+        function getActiveViewMode() {
+
+            // Check session/localStorage view preferences or default to 'page'
+
+            return localStorage.getItem(`view_pref_${state.currentView}`) || 'page';
+
+        }
+
+        function setActiveViewMode(mode) {
+
+            localStorage.setItem(`view_pref_${state.currentView}`, mode);
+
+            updateViewModeUI();
+
+            state.activeQuizPage = 1;
+
+            applyActiveQuizFilters();
+
+        }
+
+        // MASTER LOCALSTORAGE STATE LOAD/SAVE
+
+        function saveProgressToLocalStorage() {
+
+            localStorage.setItem('portal_answers_data_2026', JSON.stringify(state.userAnswers));
+
+        }
+
+        function loadProgressFromLocalStorage() {
+
+            const dataStr = localStorage.getItem('portal_answers_data_2026');
+
+            if (dataStr) {
+
+                try {
+
+                    const parsed = JSON.parse(dataStr);
+
+                    if (parsed.quiz1) state.userAnswers.quiz1 = parsed.quiz1;
+
+                    if (parsed.quiz2) state.userAnswers.quiz2 = parsed.quiz2;
+
+                    if (parsed.quiz3) state.userAnswers.quiz3 = parsed.quiz3;
+
+                    if (parsed.quiz4) state.userAnswers.quiz4 = parsed.quiz4;
+
+                } catch (e) {
+
+                    console.error("Failed parsing localStorage", e);
+
+                }
+
+            }
+
+        }
+
+        // RESET MECHANICS
+
+        function resetAllQuizzesWithConfirm() {
+
+            const modal = document.getElementById('reset-modal');
+
+            document.getElementById('reset-modal-title').textContent = "تصفير المنصة بالكامل؟";
+
+            document.getElementById('reset-modal-body').textContent = "سيتم تصفير وإعادة تهيئة جميع الاختبارات الأربعة وسيفقد كامل التقدم الحالي المحفوظ. هل أنت متأكد؟";
+
+            
+
+            document.getElementById('reset-confirm-btn').onclick = function() {
+
+                state.userAnswers = { quiz1: {}, quiz2: {}, quiz3: {}, quiz4: {} };
+
+                saveProgressToLocalStorage();
+
+                updateDashboardStats();
+
+                closeResetModal();
+
+                showToast("تم تصفير المنصة", "تم مسح كافة البيانات وبدء تجربة جديدة.", true);
+
+                if (state.currentView !== 'home') navigateTo('home');
+
             };
 
-            document.getElementById('active-quiz-title').innerText = metadata[quizId].title;
-            document.getElementById('active-quiz-desc').innerText = metadata[quizId].desc;
-
-            navigateTo('quiz');
-            applyActiveQuizFilters();
-        }
-
-        // Mathematical Statistical Hub
-        function calculateGlobalStats() {
-            let totalAnswered = 0;
-            let totalGlobalScore = 0;
-
-            // Quiz 1 Calculations (Max 148 pts)
-            let q1Correct = 0;
-            Object.keys(userProgress[1]).forEach(id => {
-                totalAnswered++;
-                if(userProgress[1][id] === quizDatabase[1][id-1].correct) q1Correct++;
-            });
-            let q1Score = q1Correct * 2;
-            totalGlobalScore += q1Score;
-            document.getElementById('prog-text-q1').innerText = `${Object.keys(userProgress[1]).length} من 74 سؤالاً`;
-
-            // Quiz 2 Calculations (Max 134 pts)
-            let q2Correct = 0;
-            Object.keys(userProgress[2]).forEach(id => {
-                totalAnswered++;
-                if(parseInt(userProgress[2][id]) === quizDatabase[2][id-1].correct) q2Correct++;
-            });
-            let q2Score = q2Correct * 2;
-            totalGlobalScore += q2Score;
-            document.getElementById('prog-text-q2').innerText = `${Object.keys(userProgress[2]).length} من 67 سؤالاً`;
-
-            // Quiz 3 Calculations (Max 126 pts)
-            let q3Score = 0;
-            Object.keys(userProgress[3]).forEach(id => {
-                totalAnswered++;
-                let selections = userProgress[3][id] || []; // Array of indices
-                let correctAnswers = quizDatabase[3][id-1].correct;
-                
-                let correctSelected = selections.filter(x => correctAnswers.includes(x)).length;
-                let wrongSelected = selections.filter(x => !correctAnswers.includes(x)).length;
-                
-                // Deduction mechanic: score = correct - wrong
-                let itemScore = correctSelected - wrongSelected;
-                if(itemScore < 0) itemScore = 0;
-                q3Score += itemScore; // Each valid answer element can accumulate points
-            });
-            totalGlobalScore += q3Score;
-            document.getElementById('prog-text-q3').innerText = `${Object.keys(userProgress[3]).length} من 63 سؤالاً`;
-
-            // Quiz 4 Calculations (Max 205 pts)
-            let q4Score = 0;
-            Object.keys(userProgress[4]).forEach(id => {
-                totalAnswered++;
-                let evaluation = userProgress[4][id]; // { text: "...", score: X }
-                q4Score += (evaluation.score || 0);
-            });
-            totalGlobalScore += q4Score;
-            document.getElementById('prog-text-q4').innerText = `${Object.keys(userProgress[4]).length} من 41 سؤالاً`;
-
-            // Dashboard Viewports updates
-            document.getElementById('dash-global-score').innerHTML = `${totalGlobalScore.toFixed(2)} <span class="text-xs text-indigo-300 font-normal">/ 611</span>`;
-            document.getElementById('dash-global-answered').innerHTML = `${totalAnswered} <span class="text-xs text-indigo-300 font-normal">/ 245</span>`;
             
-            let percent = Math.round((totalAnswered / 245) * 100) || 0;
-            document.getElementById('dash-global-percent').innerText = `${percent}%`;
 
-            let userRank = "مبتدئ (Beginner)";
-            if(percent >= 25 && percent < 50) userRank = "متوسط (Intermediate)";
-            if(percent >= 50 && percent < 80) userRank = "متقدم (Advanced)";
-            if(percent >= 80) userRank = "خبير لغوي (Expert)";
-            document.getElementById('dash-global-level').innerText = userRank;
+            modal.classList.remove('hidden');
 
-            // Active Quiz Layout Metrics updates
-            let activeQuizTotalCount = quizDatabase[activeQuizId].length;
-            let activeQuizAnsweredCount = Object.keys(userProgress[activeQuizId]).length;
-            let activeQuizScoreMap = {1: q1Score, 2: q2Score, 3: q3Score, 4: q4Score};
-
-            document.getElementById('active-quiz-score').innerText = activeQuizScoreMap[activeQuizId].toFixed(2);
-            document.getElementById('active-quiz-answered').innerText = activeQuizAnsweredCount;
-            document.getElementById('active-quiz-remaining').innerText = activeQuizTotalCount - activeQuizAnsweredCount;
         }
 
-        // View Mode and Filters Orchestrator
-        function setActiveViewMode(mode) {
-            activeViewMode = mode;
-            ['vmode-one', 'vmode-page', 'vmode-all'].forEach(id => {
-                document.getElementById(id).className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600";
-            });
-            let activeBtnId = mode === 'one' ? 'vmode-one' : (mode === 'page' ? 'vmode-page' : 'vmode-all');
-            document.getElementById(activeBtnId).className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-indigo-700 shadow-sm";
-            renderActiveQuizBody();
-        }
+        function resetActiveQuizOnly() {
 
-        function setActiveFilter(filter) {
-            activeFilter = filter;
-            ['filt-all', 'filt-unanswered', 'filt-correct', 'wrong'].forEach(id => {
-                let el = document.getElementById('filt-' + id) || document.getElementById(id);
-                if(el) el.className = "px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-lg";
-            });
-            let targetFilterBtn = document.getElementById('filt-' + filter);
-            if(targetFilterBtn) targetFilterBtn.className = "px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm";
+            const modal = document.getElementById('reset-modal');
+
+            document.getElementById('reset-modal-title').textContent = "تصفير هذا النمط فقط؟";
+
+            document.getElementById('reset-modal-body').textContent = "سيتم مسح إجابات الاختبار الحالي النشط فقط ولن تتاثر الاختبارات الأخرى. هل أنت متأكد؟";
+
             
-            currentPage = 1;
-            applyActiveQuizFilters();
+
+            document.getElementById('reset-confirm-btn').onclick = function() {
+
+                state.userAnswers[state.currentView] = {};
+
+                saveProgressToLocalStorage();
+
+                closeResetModal();
+
+                showToast("تم تصفير هذا الاختبار", "تم مسح الإجابات لهذا النمط بنجاح.", true);
+
+                
+
+                // Re-render
+
+                state.activeQuizPage = 1;
+
+                state.activeQuizFocusedId = 1;
+
+                applyActiveQuizFilters();
+
+                renderActiveGridNavigation();
+
+                syncActiveQuizHeaderStats();
+
+            };
+
+            
+
+            modal.classList.remove('hidden');
+
         }
 
-        function toggleActiveHints() {
-            renderActiveQuizBody();
+        function closeResetModal() {
+
+            document.getElementById('reset-modal').classList.add('hidden');
+
+        }
+
+        // CALCULATE SCORES
+
+        function getQuizStats(quizKey) {
+
+            let answered = 0;
+
+            let score = 0;
+
+            let totalQuestions = 0;
+
+            if (quizKey === 'quiz1') {
+
+                totalQuestions = db_quiz1.length;
+
+                Object.values(state.userAnswers.quiz1).forEach(ans => {
+
+                    answered++;
+
+                    if (ans.isCorrect) score += 2;
+
+                });
+
+            } else if (quizKey === 'quiz2') {
+
+                totalQuestions = db_quiz2.length;
+
+                Object.values(state.userAnswers.quiz2).forEach(ans => {
+
+                    answered++;
+
+                    if (ans.isCorrect) score += 2;
+
+                });
+
+            } else if (quizKey === 'quiz3') {
+
+                totalQuestions = db_quiz3.length;
+
+                Object.values(state.userAnswers.quiz3).forEach(ans => {
+
+                    answered++;
+
+                    score += ans.score; // uses precalculated partial scores
+
+                });
+
+            } else if (quizKey === 'quiz4') {
+
+                totalQuestions = db_quiz4.length;
+
+                Object.values(state.userAnswers.quiz4).forEach(ans => {
+
+                    answered++;
+
+                    score += ans.score; // uses precalculated scores (0, 2.5, 5)
+
+                });
+
+            }
+
+            return { answered, score, totalQuestions };
+
+        }
+
+        // SYNC INTERACTIVE DASHBOARD STATS
+
+        function updateDashboardStats() {
+
+            const q1 = getQuizStats('quiz1');
+
+            const q2 = getQuizStats('quiz2');
+
+            const q3 = getQuizStats('quiz3');
+
+            const q4 = getQuizStats('quiz4');
+
+            // Set Progress Card Text
+
+            document.getElementById('prog-text-q1').textContent = `${q1.answered} من ${q1.totalQuestions} سؤالاً (${Math.round(q1.answered/q1.totalQuestions*100)}%)`;
+
+            document.getElementById('prog-text-q2').textContent = `${q2.answered} من ${q2.totalQuestions} سؤالاً (${Math.round(q2.answered/q2.totalQuestions*100)}%)`;
+
+            document.getElementById('prog-text-q3').textContent = `${q3.answered} من ${q3.totalQuestions} سؤالاً (${Math.round(q3.answered/q3.totalQuestions*100)}%)`;
+
+            document.getElementById('prog-text-q4').textContent = `${q4.answered} من ${q4.totalQuestions} سؤالاً (${Math.round(q4.answered/q4.totalQuestions*100)}%)`;
+
+            // Calculate overall global stats
+
+            const totalScore = q1.score + q2.score + q3.score + q4.score;
+
+            const totalAnswered = q1.answered + q2.answered + q3.answered + q4.answered;
+
+            const totalQuestions = q1.totalQuestions + q2.totalQuestions + q3.totalQuestions + q4.totalQuestions; // 74 + 67 + 63 + 41 = 245
+
+            const overallPercent = Math.round((totalAnswered / totalQuestions) * 100) || 0;
+
+            document.getElementById('dash-global-score').textContent = `${totalScore.toFixed(2)}`;
+
+            document.getElementById('dash-global-answered').textContent = `${totalAnswered}`;
+
+            document.getElementById('dash-global-percent').textContent = `${overallPercent}%`;
+
+            // Classify Level based on solved percentage
+
+            let levelText = "مبتدئ (Beginner)";
+
+            if (overallPercent >= 25 && overallPercent < 50) {
+
+                levelText = "فوق المتوسط (Elementary)";
+
+            } else if (overallPercent >= 50 && overallPercent < 75) {
+
+                levelText = "متوسط (Intermediate)";
+
+            } else if (overallPercent >= 75 && overallPercent < 95) {
+
+                levelText = "متقدم (Advanced)";
+
+            } else if (overallPercent >= 95) {
+
+                levelText = "خبير ومحترف (Fluent Master) 🌟";
+
+            }
+
+            document.getElementById('dash-global-level').textContent = levelText;
+
+        }
+
+        // SYNC HEADER STATE INSIDE THE LOADED QUIZ
+
+        function syncActiveQuizHeaderStats() {
+
+            const stats = getQuizStats(state.currentView);
+
+            document.getElementById('active-quiz-score').textContent = stats.score.toFixed(2);
+
+            document.getElementById('active-quiz-answered').textContent = stats.answered;
+
+            document.getElementById('active-quiz-remaining').textContent = stats.totalQuestions - stats.answered;
+
+        }
+
+        // ACTIVE FILTERS LOGIC
+
+        function setActiveFilter(filterName) {
+
+            state.activeQuizFilter = filterName;
+
+            
+
+            // Toggle active styles on buttons
+
+            const filters = ['all', 'unanswered', 'correct', 'wrong'];
+
+            filters.forEach(f => {
+
+                const btn = document.getElementById(`filt-${f}`);
+
+                if (f === filterName) {
+
+                    btn.className = "px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm";
+
+                } else {
+
+                    btn.className = "px-3 py-1 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-lg";
+
+                }
+
+            });
+
+            state.activeQuizPage = 1;
+
+            applyActiveQuizFilters();
+
+        }
+
+        function applyActiveQuizFilters() {
+
+            state.activeQuizSearch = document.getElementById('quiz-search-input').value.toLowerCase().trim();
+
+            const filtered = getFilteredQuestionsList();
+
+            // Handle Filter alert visibility
+
+            const alert = document.getElementById('active-filter-alert');
+
+            const alertText = document.getElementById('active-filter-alert-text');
+
+            if (state.activeQuizFilter !== 'all' || state.activeQuizSearch !== '') {
+
+                alert.classList.remove('hidden');
+
+                let criteria = [];
+
+                if (state.activeQuizFilter === 'unanswered') criteria.push("غير المجاب");
+
+                if (state.activeQuizFilter === 'correct') criteria.push("الإجابات الصحيحة");
+
+                if (state.activeQuizFilter === 'wrong') criteria.push("الإجابات الخاطئة / الناقصة");
+
+                if (state.activeQuizSearch !== '') criteria.push(`بحث عن: "${state.activeQuizSearch}"`);
+
+                alertText.textContent = `تصفية نشطة حالياً: (${criteria.join(' + ')}). الأسئلة المطابقة: ${filtered.length}`;
+
+            } else {
+
+                alert.classList.add('hidden');
+
+            }
+
+            renderFilteredQuestionsList(filtered);
+
         }
 
         function clearActiveFilters() {
+
             document.getElementById('quiz-search-input').value = '';
+
             setActiveFilter('all');
+
         }
 
-        // Filter Matrix Engine
-        let filteredQuestions = [];
-        function applyActiveQuizFilters() {
-            let baseList = quizDatabase[activeQuizId];
-            let searchVal = document.getElementById('quiz-search-input').value.toLowerCase().trim();
+        function getFilteredQuestionsList() {
+
+            const list = state.currentView === 'quiz1' ? db_quiz1 :
+
+                         state.currentView === 'quiz2' ? db_quiz2 :
+
+                         state.currentView === 'quiz3' ? db_quiz3 : db_quiz4;
+
+            return list.filter(q => {
+
+                const answer = state.userAnswers[state.currentView][q.id];
+
+                
+
+                // Filter by solve status
+
+                if (state.activeQuizFilter === 'unanswered' && answer !== undefined) return false;
+
+                if (state.activeQuizFilter === 'correct') {
+
+                    if (answer === undefined) return false;
+
+                    if (state.currentView === 'quiz1' || state.currentView === 'quiz2') {
+
+                        if (!answer.isCorrect) return false;
+
+                    } else if (state.currentView === 'quiz3') {
+
+                        if (answer.score < 2) return false; // Full points only
+
+                    } else if (state.currentView === 'quiz4') {
+
+                        if (answer.score < 5) return false; // Full translation match
+
+                    }
+
+                }
+
+                if (state.activeQuizFilter === 'wrong') {
+
+                    if (answer === undefined) return false;
+
+                    if (state.currentView === 'quiz1' || state.currentView === 'quiz2') {
+
+                        if (answer.isCorrect) return false;
+
+                    } else if (state.currentView === 'quiz3') {
+
+                        if (answer.score === 2) return false; // Needs to be wrong or partially wrong
+
+                    } else if (state.currentView === 'quiz4') {
+
+                        if (answer.score === 5) return false;
+
+                    }
+
+                }
+
+                // Filter by Search match
+
+                if (state.activeQuizSearch !== '') {
+
+                    const text = state.currentView === 'quiz4' ? q.text : q.question;
+
+                    const hint = state.currentView === 'quiz4' ? q.correct_ar.join(" ") : q.hint;
+
+                    const matchText = text.toLowerCase().includes(state.activeQuizSearch);
+
+                    const matchHint = hint.toLowerCase().includes(state.activeQuizSearch);
+
+                    if (!matchText && !matchHint) return false;
+
+                }
+
+                return true;
+
+            });
+
+        }
+
+        function renderFilteredQuestionsList(filtered) {
+
+            const container = document.getElementById('active-questions-container');
+
+            const emptyState = document.getElementById('quiz-empty-state');
+
+            const pagination = document.getElementById('quiz-pagination-panel');
+
             
-            // Apply Search Filtering
-            if (searchVal !== "") {
-                baseList = baseList.filter(q => q.question.toLowerCase().includes(searchVal) || q.translation.includes(searchVal));
-                document.getElementById('active-filter-alert').classList.remove('hidden');
-                document.getElementById('active-filter-alert-text').innerText = `البحث النشط عن: "${searchVal}"`;
-            } else if (activeFilter === 'all') {
-                document.getElementById('active-filter-alert').classList.add('hidden');
-            }
 
-            // Apply Status Filtering
-            if (activeFilter === 'unanswered') {
-                baseList = baseList.filter(q => userProgress[activeQuizId][q.id] === undefined);
-            } else if (activeFilter === 'correct') {
-                baseList = baseList.filter(q => isQuestionCorrectlyAnswered(q));
-            } else if (activeFilter === 'wrong') {
-                baseList = baseList.filter(q => userProgress[activeQuizId][q.id] !== undefined && !isQuestionCorrectlyAnswered(q));
-            }
+            container.innerHTML = '';
 
-            if(activeFilter !== 'all') {
-                document.getElementById('active-filter-alert').classList.remove('hidden');
-                let statusTexts = { unanswered: "الأسئلة غير المجابة", correct: "الإجابات الصحيحة", wrong: "الإجابات الخاطئة" };
-                document.getElementById('active-filter-alert-text').innerText = `التصفية النشطة الحالية: ${statusTexts[activeFilter]}`;
-            }
+            if (filtered.length === 0) {
 
-            filteredQuestions = baseList;
-            
-            if(filteredQuestions.length === 0) {
-                document.getElementById('quiz-empty-state').classList.remove('hidden');
-                document.getElementById('active-questions-container').innerHTML = '';
-                document.getElementById('quiz-pagination-panel').classList.add('hidden');
+                emptyState.classList.remove('hidden');
+
+                pagination.classList.add('hidden');
+
+                return;
+
             } else {
-                document.getElementById('quiz-empty-state').classList.add('hidden');
-                renderActiveQuizBody();
-            }
-            renderNavigationGrid();
-        }
 
-        function isQuestionCorrectlyAnswered(q) {
-            let ans = userProgress[activeQuizId][q.id];
-            if(ans === undefined) return false;
-            if(activeQuizId === 1) return ans === q.correct;
-            if(activeQuizId === 2) return parseInt(ans) === q.correct;
-            if(activeQuizId === 3) {
-                let matches = ans.filter(x => q.correct.includes(x)).length;
-                return matches === q.correct.length && ans.length === q.correct.length;
+                emptyState.classList.add('hidden');
+
             }
-            if(activeQuizId === 4) return ans.score >= 4; // High compliance threshold
-            return false;
+
+            let itemsToRender = [];
+
+            const viewMode = getActiveViewMode();
+
+            if (viewMode === 'all') {
+
+                itemsToRender = filtered;
+
+                pagination.classList.add('hidden');
+
+            } else if (viewMode === 'page') {
+
+                pagination.classList.remove('hidden');
+
+                const totalPages = Math.ceil(filtered.length / itemsPerPage);
+
+                if (state.activeQuizPage > totalPages) state.activeQuizPage = totalPages || 1;
+
+                
+
+                const startIdx = (state.activeQuizPage - 1) * itemsPerPage;
+
+                const endIdx = startIdx + itemsPerPage;
+
+                itemsToRender = filtered.slice(startIdx, endIdx);
+
+                
+
+                document.getElementById('q-page-indicator').textContent = `الصفحة ${state.activeQuizPage} من ${totalPages}`;
+
+                document.getElementById('q-prev-page-btn').disabled = state.activeQuizPage === 1;
+
+                document.getElementById('q-next-page-btn').disabled = state.activeQuizPage === totalPages;
+
+            } else if (viewMode === 'one') {
+
+                pagination.classList.add('hidden');
+
+                let matched = filtered.find(q => q.id === state.activeQuizFocusedId);
+
+                if (!matched) {
+
+                    matched = filtered[0];
+
+                    state.activeQuizFocusedId = matched.id;
+
+                }
+
+                itemsToRender = [matched];
+
+                renderSingleCardNavigationRow(filtered, matched);
+
+            }
+
+            itemsToRender.forEach(q => {
+
+                container.appendChild(createUniversalCardElement(q));
+
+            });
+
         }
 
         function changeActivePage(dir) {
-            currentPage += dir;
-            renderActiveQuizBody();
+
+            state.activeQuizPage += dir;
+
+            applyActiveQuizFilters();
+
         }
 
-        function jumpToQuestionIndex(id) {
-            let foundIdx = filteredQuestions.findIndex(q => q.id === id);
-            if(foundIdx === -1) return;
-            
-            if(activeViewMode === 'one') {
-                currentSingleQuestionIdx = foundIdx;
-            } else if(activeViewMode === 'page') {
-                currentPage = Math.floor(foundIdx / itemsPerPage) + 1;
-            }
-            renderActiveQuizBody();
-        }
+        function renderSingleCardNavigationRow(filteredList, currentQ) {
 
-        // Render Nav Numbers Sidebar Grid
-        function renderNavigationGrid() {
-            const container = document.getElementById('active-grid-nav-container');
-            container.innerHTML = '';
-            
-            quizDatabase[activeQuizId].forEach((q, idx) => {
-                const btn = document.createElement('button');
-                btn.innerText = q.id;
-                
-                let baseStyle = "p-2 text-xs font-bold rounded-lg transition-all text-center border ";
-                let ans = userProgress[activeQuizId][q.id];
-                
-                if (ans === undefined) {
-                    baseStyle += "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
-                } else {
-                    if (isQuestionCorrectlyAnswered(q)) {
-                        baseStyle += "bg-emerald-500 border-emerald-600 text-white";
-                    } else {
-                        baseStyle += "bg-rose-500 border-rose-600 text-white";
-                    }
-                }
-                
-                btn.className = baseStyle;
-                btn.onclick = () => jumpToQuestionIndex(q.id);
-                container.appendChild(btn);
-            });
-        }
-
-        // Core Layout Builder UI Engine
-        function renderActiveQuizBody() {
             const container = document.getElementById('active-questions-container');
+
+            const idx = filteredList.findIndex(q => q.id === currentQ.id);
+
+            const total = filteredList.length;
+
+            const navDiv = document.createElement('div');
+
+            navDiv.className = "flex items-center justify-between bg-indigo-50 border border-indigo-100 p-3 rounded-2xl mb-4 text-xs font-bold text-indigo-900";
+
+            
+
+            const prevButton = document.createElement('button');
+
+            prevButton.className = "px-3 py-1.5 bg-white hover:bg-indigo-100 rounded-lg border border-indigo-200 transition-all disabled:opacity-40";
+
+            prevButton.textContent = "السابق 🠆";
+
+            prevButton.disabled = idx === 0;
+
+            prevButton.onclick = () => jumpToQuestion(filteredList[idx - 1].id);
+
+            const indicator = document.createElement('span');
+
+            indicator.textContent = `السؤال المُرَكَّز ${idx + 1} من أصل ${total}`;
+
+            const nextButton = document.createElement('button');
+
+            nextButton.className = "px-3 py-1.5 bg-white hover:bg-indigo-100 rounded-lg border border-indigo-200 transition-all disabled:opacity-40";
+
+            nextButton.textContent = "🠄 التالي";
+
+            nextButton.disabled = idx === total - 1;
+
+            nextButton.onclick = () => jumpToQuestion(filteredList[idx + 1].id);
+
+            navDiv.appendChild(prevButton);
+
+            navDiv.appendChild(indicator);
+
+            navDiv.appendChild(nextButton);
+
+            container.appendChild(navDiv);
+
+        }
+
+        function jumpToQuestion(id) {
+
+            state.activeQuizFocusedId = id;
+
+            const viewMode = getActiveViewMode();
+
+            
+
+            if (viewMode === 'page') {
+
+                const filtered = getFilteredQuestionsList();
+
+                const qIdx = filtered.findIndex(q => q.id === id);
+
+                if (qIdx !== -1) {
+
+                    state.activeQuizPage = Math.floor(qIdx / itemsPerPage) + 1;
+
+                }
+
+            }
+
+            
+
+            applyActiveQuizFilters();
+
+            renderActiveGridNavigation();
+
+            // Scroll slightly
+
+            const container = document.getElementById('active-questions-container');
+
+            if (container) {
+
+                container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            }
+
+        }
+
+        // GRID NAVIGATION SYSTEM RENDERER
+
+        function renderActiveGridNavigation() {
+
+            const container = document.getElementById('active-grid-nav-container');
+
             container.innerHTML = '';
-            
-            let displayList = [];
-            const paginator = document.getElementById('quiz-pagination-panel');
-            
-            if (activeViewMode === 'all') {
-                displayList = filteredQuestions;
-                paginator.classList.add('hidden');
-            } else if (activeViewMode === 'one') {
-                paginator.classList.remove('hidden');
-                if(currentSingleQuestionIdx >= filteredQuestions.length) currentSingleQuestionIdx = 0;
-                displayList = [filteredQuestions[currentSingleQuestionIdx]];
-                
-                document.getElementById('q-page-indicator').innerText = `سؤال ${currentSingleQuestionIdx + 1} من ${filteredQuestions.length}`;
-                document.getElementById('q-prev-page-btn').disabled = currentSingleQuestionIdx === 0;
-                document.getElementById('q-next-page-btn').disabled = currentSingleQuestionIdx === filteredQuestions.length - 1;
-            } else { // 'page' system
-                paginator.classList.remove('hidden');
-                let totalPages = Math.ceil(filteredQuestions.length / itemsPerPage) || 1;
-                if(currentPage > totalPages) currentPage = totalPages;
-                
-                let start = (currentPage - 1) * itemsPerPage;
-                displayList = filteredQuestions.slice(start, start + itemsPerPage);
-                
-                document.getElementById('q-page-indicator').innerText = `الصفحة ${currentPage} من ${totalPages}`;
-                document.getElementById('q-prev-page-btn').disabled = currentPage === 1;
-                document.getElementById('q-next-page-btn').disabled = currentPage === totalPages;
-            }
 
-            // Build Individual Question DOM Elements
-            displayList.forEach(q => {
-                const card = document.createElement('div');
-                card.className = "bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 premium-shadow relative";
-                
-                let showHints = document.getElementById('hints-toggle').checked;
-                let ans = userProgress[activeQuizId][q.id];
-                
-                // Question Header
-                let headerHtml = `<div class="flex items-center justify-between border-b border-slate-100 pb-2">
-                    <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-black rounded-lg">سؤال #${q.id}</span>
-                    <span class="text-xs font-bold text-slate-400">${activeQuizId === 4 ? '5 نقاط قصوى' : 'نقطتان'}</span>
-                </div>
-                <div class="space-y-1">
-                    <p class="english-text text-base font-bold text-slate-900 tracking-wide select-all" dir="ltr">${q.question}</p>
-                    <p class="text-xs text-slate-500 font-medium">${q.translation}</p>
-                </div>`;
-                
-                card.innerHTML = headerHtml;
+            const list = state.currentView === 'quiz1' ? db_quiz1 :
 
-                // Question Inputs Rendering based on Category Identifier
-                const interactiveArea = document.createElement('div');
-                interactiveArea.className = "pt-2";
-                
-                if (activeQuizId === 1) { // True False
-                    let isTrueChecked = ans === "true";
-                    let isFalseChecked = ans === "false";
-                    
-                    let tfStyleT = "option-label flex items-center gap-3 p-3 text-sm font-bold rounded-xl border-2 ";
-                    let tfStyleF = "option-label flex items-center gap-3 p-3 text-sm font-bold rounded-xl border-2 ";
-                    
-                    if(ans !== undefined) {
-                        if(q.correct === "true") tfStyleT += "bg-correct border-emerald-500";
-                        if(q.correct === "false") tfStyleF += "bg-correct border-emerald-500";
-                        if(ans === "true" && q.correct !== "true") tfStyleT += "bg-incorrect border-rose-500";
-                        if(ans === "false" && q.correct !== "false") tfStyleF += "bg-incorrect border-rose-500";
-                    }
+                         state.currentView === 'quiz2' ? db_quiz2 :
 
-                    interactiveArea.innerHTML = `<div class="grid grid-cols-2 gap-4">
-                        <label class="${tfStyleT}">
-                            <input type="radio" name="q1-${q.id}" class="option-input" ${isTrueChecked ? 'checked' : ''} onchange="submitQuizAnswer(1, ${q.id}, 'true')" ${ans !== undefined ? 'disabled' : ''}>
-                            <span class="checked-indicator"></span> True (صحيح)
-                        </label>
-                        <label class="${tfStyleF}">
-                            <input type="radio" name="q1-${q.id}" class="option-input" ${isFalseChecked ? 'checked' : ''} onchange="submitQuizAnswer(1, ${q.id}, 'false')" ${ans !== undefined ? 'disabled' : ''}>
-                            <span class="checked-indicator"></span> False (خطأ)
-                        </label>
-                    </div>`;
-                }
-                else if (activeQuizId === 2) { // Single Choice MCQ
-                    let choiceLayout = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">`;
-                    q.options.forEach((opt, oIdx) => {
-                        let isOptChecked = ans !== undefined && parseInt(ans) === oIdx;
-                        let lblStyle = "option-label flex items-center gap-3 p-3 text-xs font-semibold rounded-xl ";
-                        
-                        if(ans !== undefined) {
-                            if(q.correct === oIdx) lblStyle += "bg-correct border-emerald-500";
-                            else if(isOptChecked) lblStyle += "bg-incorrect border-rose-500";
-                        }
-                        
-                        choiceLayout += `<label class="${lblStyle}">
-                            <input type="radio" name="q2-${q.id}" class="option-input" ${isOptChecked ? 'checked' : ''} onchange="submitQuizAnswer(2, ${q.id}, ${oIdx})" ${ans !== undefined ? 'disabled' : ''}>
-                            <span class="checked-indicator"></span> ${opt}
-                        </label>`;
-                    });
-                    choiceLayout += `</div>`;
-                    interactiveArea.innerHTML = choiceLayout;
-                }
-                else if (activeQuizId === 3) { // Multiple Choices Multi-Select
-                    let currentSelections = ans || [];
-                    let multLayout = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">`;
-                    
-                    q.options.forEach((opt, oIdx) => {
-                        let isSelected = currentSelections.includes(oIdx);
-                        let lblStyle = "option-label flex items-center gap-3 p-3 text-xs font-semibold rounded-xl ";
-                        
-                        if(ans !== undefined) {
-                            if(q.correct.includes(oIdx)) lblStyle += "bg-correct border-emerald-500";
-                            else if(isSelected) lblStyle += "bg-incorrect border-rose-500";
-                        }
-                        
-                        multLayout += `<label class="${lblStyle}">
-                            <input type="checkbox" class="option-input" ${isSelected ? 'checked' : ''} onchange="accumulateMultiChoiceState(${q.id}, ${oIdx})" ${ans !== undefined ? 'disabled' : ''}>
-                            <span class="checked-indicator"></span> ${opt}
-                        </label>`;
-                    });
-                    multLayout += `</div>`;
-                    
-                    if(ans === undefined) {
-                        multLayout += `<div class="flex justify-end pt-3">
-                            <button onclick="lockMultiChoiceAnswer(${q.id})" class="px-4 py-1.5 bg-emerald-600 text-white text-xs font-black rounded-xl hover:bg-emerald-700 transition-all">تأكيد خياراتي والحل</button>
-                        </div>`;
-                    }
-                    interactiveArea.innerHTML = multLayout;
-                }
-                else if (activeQuizId === 4) { // Absolute Free Translation
-                    let currentText = ans ? ans.text : '';
-                    if(ans === undefined) {
-                        interactiveArea.innerHTML = `<div class="space-y-3">
-                            <textarea id="tx-area-${q.id}" rows="2" placeholder="اكتب صياغتك الترجمية الحرة هنا بدقة..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"></textarea>
-                            <div class="flex justify-end">
-                                <button onclick="evaluateTranslationInput(${q.id})" class="px-4 py-1.5 bg-amber-600 text-white text-xs font-black rounded-xl hover:bg-amber-700 transition-all">إرسال وتدقيق الترجمة</button>
-                            </div>
-                        </div>`;
-                    } else {
-                        interactiveArea.innerHTML = `<div class="space-y-3 bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs">
-                            <div><span class="font-bold text-slate-500">ترجمتك المقدمة:</span> <p class="text-slate-800 font-semibold mt-1">${currentText}</p></div>
-                            <div class="pt-2 border-t border-slate-200"><span class="font-bold text-emerald-600 block mb-1">نموذج الإجابة المقترح:</span> <p class="font-bold text-slate-900 leading-relaxed">${q.sampleAnswer}</p></div>
-                            <div class="pt-2 flex justify-between items-center bg-white p-2 rounded-lg border border-slate-100">
-                                <span class="font-black text-indigo-700">النتيجة التقديرية المحتسبة:</span>
-                                <span class="px-2.5 py-1 bg-indigo-50 text-indigo-600 font-black rounded-md">${ans.score.toFixed(1)} / 5</span>
-                            </div>
-                        </div>`;
-                    }
-                }
+                         state.currentView === 'quiz3' ? db_quiz3 : db_quiz4;
 
-                card.appendChild(interactiveArea);
+            list.forEach(q => {
 
-                // Inline Explanation Hint panel display mechanism
-                if (showHints || ans !== undefined) {
-                    const hintBox = document.createElement('div');
-                    hintBox.className = "p-3.5 bg-slate-50 border-r-4 border-indigo-500 text-xs text-slate-600 font-medium rounded-l-xl space-y-1";
-                    hintBox.innerHTML = `<span class="font-extrabold text-indigo-700 block text-[10px] uppercase">التوضيح اللغوي ومفاتيح الحل:</span>
-                    <p>لضمان الكفاءة، راجع دائماً مواضع ترتيب الصفات والأفعال المساعدة. الإجابة النموذجية المعتمدة ترتكز على القواعد البنيوية الأساسية.</p>`;
-                    card.appendChild(hintBox);
-                }
+                const button = document.createElement('button');
 
-                container.appendChild(card);
-            });
-            calculateGlobalStats();
-        }
+                button.textContent = q.id;
 
-        // Action Answer Submissions Processing
-        function submitQuizAnswer(quizId, questionId, value) {
-            userProgress[quizId][questionId] = value;
-            
-            // Check Correctness to trigger Audio FX elements
-            let qData = quizDatabase[quizId][questionId-1];
-            let isCorrect = false;
-            if(quizId === 1) isCorrect = value === qData.correct;
-            if(quizId === 2) isCorrect = parseInt(value) === qData.correct;
+                button.id = `active-grid-nav-${q.id}`;
 
-            if(isCorrect) {
-                playSound('success');
-                confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
-            } else {
-                playSound('fail');
-            }
+                button.className = getGridItemClass(q.id);
 
-            saveProgress();
-            if(activeViewMode === 'one') {
-                setTimeout(() => changeActiveSingleViewIndex(1), 800);
-            } else {
-                renderActiveQuizBody();
-            }
-            renderNavigationGrid();
-        }
+                button.onclick = () => jumpToQuestion(q.id);
 
-        // Multi-choice state storage array tracking
-        let tempMultiChoices = {};
-        function accumulateMultiChoiceState(qId, optionIdx) {
-            if(!tempMultiChoices[qId]) tempMultiChoices[qId] = [];
-            let arr = tempMultiChoices[qId];
-            if(arr.includes(optionIdx)) {
-                tempMultiChoices[qId] = arr.filter(x => x !== optionIdx);
-            } else {
-                arr.push(optionIdx);
-            }
-        }
+                container.appendChild(button);
 
-        function lockMultiChoiceAnswer(qId) {
-            let selections = tempMultiChoices[qId] || [];
-            userProgress[3][qId] = selections;
-            
-            let qData = quizDatabase[3][qId-1];
-            let correctCount = selections.filter(x => qData.correct.includes(x)).length;
-            if(correctCount === qData.correct.length && selections.length === qData.correct.length) {
-                playSound('success');
-                confetti({ particleCount: 40, spread: 50 });
-            } else {
-                playSound('fail');
-            }
-
-            saveProgress();
-            renderActiveQuizBody();
-            renderNavigationGrid();
-        }
-
-        // Intelligent Keyword-Matching Translation Scoring Mechanism
-        function evaluateTranslationInput(qId) {
-            const txt = document.getElementById(`tx-area-${qId}`).value.trim();
-            if(txt === "") return;
-
-            let qData = quizDatabase[4][qId-1];
-            let matchedKeywords = 0;
-            
-            qData.matches.forEach(kw => {
-                if(txt.toLowerCase().includes(kw.toLowerCase())) matchedKeywords++;
             });
 
-            // Calculate score out of 5 based on key match compliance percentage
-            let complianceRatio = matchedKeywords / qData.matches.length;
-            let finalScore = complianceRatio * 5;
-            if(finalScore < 1.5 && txt.length > 10) finalScore = 2.0; // Partial writing comfort criteria
+        }
 
-            userProgress[4][qId] = {
-                text: txt,
-                score: parseFloat(finalScore.toFixed(1))
-            };
+        function getGridItemClass(questionId) {
 
-            if(finalScore >= 3.5) {
-                playSound('success');
-                confetti({ particleCount: 40, angle: 60, spread: 55 });
+            const answer = state.userAnswers[state.currentView][questionId];
+
+            const isActive = state.activeQuizFocusedId === questionId && getActiveViewMode() === 'one';
+
+            
+
+            let base = "h-9 w-full flex items-center justify-center rounded-lg text-xs font-bold transition-all ";
+
+            
+
+            if (isActive) {
+
+                base += "ring-2 ring-indigo-500 bg-indigo-50 text-indigo-700 border border-indigo-300 shadow-sm ";
+
+            } else if (answer === undefined) {
+
+                base += "bg-slate-50 border border-slate-200 text-slate-500 hover:bg-slate-100 ";
+
             } else {
-                playSound('fail');
+
+                // If it's a graded answer, color green/red based on correct or score percentage
+
+                if (state.currentView === 'quiz1' || state.currentView === 'quiz2') {
+
+                    base += answer.isCorrect ? "bg-emerald-500 text-white shadow-sm " : "bg-rose-500 text-white shadow-sm ";
+
+                } else if (state.currentView === 'quiz3') {
+
+                    base += answer.score === 2 ? "bg-emerald-500 text-white shadow-sm " : 
+
+                            answer.score > 0 ? "bg-amber-500 text-white shadow-sm " : "bg-rose-500 text-white shadow-sm ";
+
+                } else if (state.currentView === 'quiz4') {
+
+                    base += answer.score === 5 ? "bg-emerald-500 text-white shadow-sm " : 
+
+                            answer.score > 0 ? "bg-amber-500 text-white shadow-sm " : "bg-rose-500 text-white shadow-sm ";
+
+                }
+
             }
 
-            saveProgress();
-            renderActiveQuizBody();
-            renderNavigationGrid();
+            return base;
+
         }
 
-        function changeActiveSingleViewIndex(dir) {
-            let nextIdx = currentSingleQuestionIdx + dir;
-            if(nextIdx >= 0 && nextIdx < filteredQuestions.length) {
-                currentSingleQuestionIdx = nextIdx;
-                renderActiveQuizBody();
+        // STATE MUTATION HANDLERS
+
+        function selectQuiz1Answer(questionId, selectedValue) {
+
+            const question = db_quiz1.find(q => q.id === questionId);
+
+            if (!question) return;
+
+            const isCorrect = selectedValue === question.correctAnswer;
+
+            playSound(isCorrect ? 'correct' : 'wrong');
+
+            state.userAnswers.quiz1[questionId] = { selectedValue, isCorrect };
+
+            saveAndRefreshElements(questionId);
+
+            showToast(isCorrect ? "إجابة صحيحة! (+2)" : "إجابة خاطئة! (0)", `السؤال #${questionId} تم حله.`, isCorrect);
+
+            autoAdvanceInFocusMode(questionId);
+
+        }
+
+        function selectQuiz2Answer(questionId, selectedAnswer) {
+
+            const question = db_quiz2.find(q => q.id === questionId);
+
+            if (!question) return;
+
+            const isCorrect = selectedAnswer === question.correctAnswer;
+
+            playSound(isCorrect ? 'correct' : 'wrong');
+
+            state.userAnswers.quiz2[questionId] = { selectedAnswer, isCorrect };
+
+            saveAndRefreshElements(questionId);
+
+            showToast(isCorrect ? "إجابة صحيحة! (+2)" : "إجابة خاطئة! (0)", `السؤال #${questionId} تم حله.`, isCorrect);
+
+            autoAdvanceInFocusMode(questionId);
+
+        }
+
+        function submitQuiz3Answer(questionId) {
+
+            const question = db_quiz3.find(q => q.id === questionId);
+
+            if (!question) return;
+
+            const form = document.getElementById(`q3-form-${questionId}`);
+
+            if (!form) return;
+
+            const checkedInputs = form.querySelectorAll(`input[name="q3-${questionId}"]:checked`);
+
+            const selectedOptions = Array.from(checkedInputs).map(i => i.value);
+
+            if (selectedOptions.length === 0) {
+
+                showToast("تنبيه", "يرجى تحديد خيار واحد على الأقل قبل التحقق.", false);
+
+                return;
+
             }
-        }
 
-        // Resets Functions Controllers
-        function resetActiveQuizOnly() {
-            if(confirm("هل أنت متأكد من تصفير وإلغاء كافة إجابات هذا النمط من الاختبارات فقط؟")) {
-                userProgress[activeQuizId] = {};
-                saveProgress();
-                applyActiveQuizFilters();
+            const correctAnswers = question.correct;
+
+            const valuePerCorrect = 2 / correctAnswers.length;
+
+            let correctChosen = 0;
+
+            let incorrectChosen = 0;
+
+            selectedOptions.forEach(opt => {
+
+                if (correctAnswers.includes(opt)) correctChosen++;
+
+                else incorrectChosen++;
+
+            });
+
+            let finalScore = (correctChosen * valuePerCorrect) - (incorrectChosen * valuePerCorrect);
+
+            finalScore = parseFloat(Math.max(0, finalScore).toFixed(2));
+
+            const isFullyCorrect = finalScore === 2;
+
+            playSound(isFullyCorrect ? 'correct' : 'wrong');
+
+            state.userAnswers.quiz3[questionId] = { selectedOptions, score: finalScore };
+
+            saveAndRefreshElements(questionId);
+
+            if (isFullyCorrect) {
+
+                showToast("ممتاز! درجة كاملة (+2)", `تم حل السؤال #${questionId} بشكل صحيح وصائب تماماً.`, true);
+
+            } else {
+
+                showToast(`نتيجة جزئية: ${finalScore}/2`, `السؤال #${questionId}: الخطأ يأكل الصواب.`, false);
+
             }
+
+            autoAdvanceInFocusMode(questionId);
+
         }
 
-        function resetAllQuizzesWithConfirm() {
-            if(confirm("تحذير! سيتم حذف كافة البيانات والنتائج المسجلة وتصفير المنصة تماماً للبدء من جديد. هل تود الاستمرار؟")) {
-                userProgress = { 1: {}, 2: {}, 3: {}, 4: {} };
-                saveProgress();
-                if(!document.getElementById('screen-quiz-container').classList.contains('hidden')) {
-                    applyActiveQuizFilters();
+        function submitQuiz4Translation(questionId) {
+
+            const question = db_quiz4.find(q => q.id === questionId);
+
+            if (!question) return;
+
+            const inputEl = document.getElementById(`answer-q4-${questionId}`);
+
+            if (!inputEl) return;
+
+            const studentText = normalizeTranslationText(inputEl.value);
+
+            if (studentText === '') {
+
+                showToast("تنبيه", "يرجى كتابة نص الترجمة في المساحة المخصصة أولاً.", false);
+
+                return;
+
+            }
+
+            const isEnglishToArabic = question.direction === "English to Arabic";
+
+            const correctAnswers = isEnglishToArabic ? question.correct_ar : question.correct_en;
+
+            const partialMatches = isEnglishToArabic ? question.partial_ar : question.partial_en;
+
+            let score = 0;
+
+            let feedback = "";
+
+            let isPerfect = false;
+
+            // 1. Full Match (5 Points)
+
+            const isFullMatch = correctAnswers.some(ans => normalizeTranslationText(ans) === studentText);
+
+            if (isFullMatch) {
+
+                score = 5;
+
+                feedback = "إجابة ممتازة ومطابقة تماماً! درجة كاملة (5/5).";
+
+                isPerfect = true;
+
+            } else {
+
+                // 2. Partial Match (2.5 Points)
+
+                const isPartial = partialMatches.some(phrase => studentText.includes(normalizeTranslationText(phrase)));
+
+                if (isPartial) {
+
+                    score = 2.5;
+
+                    feedback = "إجابة جزئية دقيقة تحتوي على كلمات مفتاحية صحيحة (2.5/5).";
+
                 } else {
-                    calculateGlobalStats();
+
+                    score = 0;
+
+                    feedback = "الترجمة غير مكتملة أو لم تطابق الكلمات المفتاحية الأساسية (0/5).";
+
                 }
+
             }
+
+            playSound(isPerfect ? 'correct' : 'wrong');
+
+            state.userAnswers.quiz4[questionId] = { text: inputEl.value, score, checked: true };
+
+            saveAndRefreshElements(questionId);
+
+            showToast(isPerfect ? "أحسنت! 5/5" : `النتيجة: ${score}/5`, feedback, isPerfect);
+
+            autoAdvanceInFocusMode(questionId);
+
         }
 
-        // Initialization Entrypoint
-        window.onload = () => {
-            calculateGlobalStats();
+        // HELPER UTILITIES
+
+        function saveAndRefreshElements(questionId) {
+
+            saveProgressToLocalStorage();
+
+            syncActiveQuizHeaderStats();
+
+            
+
+            // Redraw card and nav grid elements without massive DOM repaint
+
+            const container = document.getElementById('active-questions-container');
+
+            const cardEl = document.getElementById(`card-${questionId}`);
+
+            if (cardEl) {
+
+                const question = db_quiz1.find(q => q.id === questionId) ||
+
+                                 db_quiz2.find(q => q.id === questionId) ||
+
+                                 db_quiz3.find(q => q.id === questionId) ||
+
+                                 db_quiz4.find(q => q.id === questionId);
+
+                const replacement = createUniversalCardElement(question);
+
+                cardEl.parentNode.replaceChild(replacement, cardEl);
+
+            }
+
+            
+
+            // Refresh nav button
+
+            const navBtn = document.getElementById(`active-grid-nav-${questionId}`);
+
+            if (navBtn) navBtn.className = getGridItemClass(questionId);
+
+        }
+
+        function autoAdvanceInFocusMode(questionId) {
+
+            const viewMode = getActiveViewMode();
+
+            if (viewMode === 'one') {
+
+                setTimeout(() => {
+
+                    const list = state.currentView === 'quiz1' ? db_quiz1 :
+
+                                 state.currentView === 'quiz2' ? db_quiz2 :
+
+                                 state.currentView === 'quiz3' ? db_quiz3 : db_quiz4;
+
+                    // Locate next unsolved item
+
+                    const unanswered = list.find(q => q.id > questionId && state.userAnswers[state.currentView][q.id] === undefined);
+
+                    if (unanswered) {
+
+                        jumpToQuestion(unanswered.id);
+
+                    } else {
+
+                        const firstUnsolved = list.find(q => state.userAnswers[state.currentView][q.id] === undefined);
+
+                        if (firstUnsolved) jumpToQuestion(firstUnsolved.id);
+
+                    }
+
+                }, 1400);
+
+            }
+
+        }
+
+        function normalizeTranslationText(text) {
+
+            if (!text) return "";
+
+            // Strip punctuations, standardize space patterns, normalize common Arabic characters
+
+            return text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()؟?]/g, " ")
+
+                       .replace(/\s\s+/g, ' ')
+
+                       .replace(/[\u064B-\u0652]/g, "") // remove diacritics
+
+                       .replace(/أ|إ|آ/g, 'ا') // unify hamza on Alif
+
+                       .replace(/ة/g, 'ت') // standardizing marbouta to tabouta for loose matching
+
+                       .trim()
+
+                       .toLowerCase();
+
+        }
+
+        // MASTER COMPONENT BUILDER (Universal Quiz Card Generator)
+
+        function createUniversalCardElement(q) {
+
+            const card = document.createElement('div');
+
+            card.id = `card-${q.id}`;
+
+            card.className = "transition-all-300 transform border border-slate-200 bg-white rounded-2xl premium-shadow p-5 sm:p-6 relative overflow-hidden group hover:border-indigo-100 hover:shadow-indigo-50/10";
+
+            
+
+            const isAnswered = state.userAnswers[state.currentView][q.id] !== undefined;
+
+            const savedAns = state.userAnswers[state.currentView][q.id];
+
+            // 1. Sidebar status decoration line
+
+            const decorationLine = document.createElement('div');
+
+            decorationLine.className = "absolute top-0 bottom-0 right-0 w-1.5 ";
+
+            if (isAnswered) {
+
+                if (state.currentView === 'quiz1' || state.currentView === 'quiz2') {
+
+                    decorationLine.className += savedAns.isCorrect ? "bg-emerald-500" : "bg-rose-500";
+
+                } else {
+
+                    decorationLine.className += savedAns.score > 0 ? (savedAns.score >= 2 ? "bg-emerald-500" : "bg-amber-500") : "bg-rose-500";
+
+                }
+
+            } else {
+
+                decorationLine.className += "bg-slate-100 group-hover:bg-indigo-200/50 transition-colors";
+
+            }
+
+            card.appendChild(decorationLine);
+
+            // 2. Card Header Badges
+
+            const header = document.createElement('div');
+
+            header.className = "flex items-center justify-between mb-4 mr-1";
+
+            
+
+            const idBadge = document.createElement('span');
+
+            idBadge.className = "text-[10px] font-black uppercase px-2.5 py-1 rounded-md tracking-wider " + 
+
+                                (isAnswered ? "bg-indigo-50 text-indigo-700 border border-indigo-100" : "bg-slate-50 text-slate-500 border border-slate-200");
+
+            idBadge.textContent = `السؤال #${q.id}`;
+
+            header.appendChild(idBadge);
+
+            const scoreBadge = document.createElement('span');
+
+            scoreBadge.className = "text-[10px] font-bold text-slate-400";
+
+            scoreBadge.textContent = state.currentView === 'quiz4' ? "5 درجات" : "درجتان";
+
+            header.appendChild(scoreBadge);
+
+            card.appendChild(header);
+
+            // 3. Question text
+
+            if (state.currentView !== 'quiz4') {
+
+                const title = document.createElement('h4');
+
+                title.className = "english-text text-slate-900 font-semibold text-base sm:text-lg leading-relaxed text-left pl-2 select-text selection:bg-indigo-50";
+
+                title.dir = "ltr";
+
+                title.textContent = q.question;
+
+                card.appendChild(title);
+
+            } else {
+
+                // Direction tag for translation
+
+                const tag = document.createElement('div');
+
+                tag.className = "text-[10px] font-extrabold text-indigo-600 mb-1 flex items-center gap-1";
+
+                tag.innerHTML = q.direction === "English to Arabic" ? 
+
+                    `<span>ترجمة من الإنجليزية إلى العربية</span> ➔` : 
+
+                    `<span>ترجمة من العربية إلى الإنجليزية</span> ➔`;
+
+                card.appendChild(tag);
+
+                const srcText = document.createElement('p');
+
+                srcText.className = q.direction === "English to Arabic" ? 
+
+                    "english-text text-slate-900 font-semibold text-base sm:text-lg text-left select-text" :
+
+                    "text-slate-900 font-bold text-base sm:text-lg text-right select-text";
+
+                srcText.dir = q.direction === "English to Arabic" ? "ltr" : "rtl";
+
+                srcText.textContent = q.text;
+
+                card.appendChild(srcText);
+
+            }
+
+            // 4. Input options or field based on active mode
+
+            const globalHintsToggle = document.getElementById('hints-toggle').checked;
+
+            const revealHint = isAnswered || globalHintsToggle;
+
+            if (state.currentView === 'quiz1') {
+
+                // True False option buttons
+
+                const btnBox = document.createElement('div');
+
+                btnBox.className = "grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5 mr-1";
+
+                
+
+                ['TRUE', 'FALSE'].forEach(val => {
+
+                    const btn = document.createElement('button');
+
+                    btn.onclick = () => selectQuiz1Answer(q.id, val);
+
+                    btn.className = getQuiz1ButtonClass(q.id, val, q.correctAnswer);
+
+                    btn.innerHTML = `
+
+                        <span class="english-text font-black text-sm tracking-wide">${val}</span>
+
+                        <span class="text-xs opacity-75">${val === 'TRUE' ? '(صحيح)' : '(خطأ)'}</span>
+
+                    `;
+
+                    btnBox.appendChild(btn);
+
+                });
+
+                card.appendChild(btnBox);
+
+            } else if (state.currentView === 'quiz2') {
+
+                // Multiple Choice Single Select Options
+
+                const optGrid = document.createElement('div');
+
+                optGrid.className = "grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5 mr-1";
+
+                
+
+                q.options.forEach(opt => {
+
+                    const btn = document.createElement('button');
+
+                    btn.onclick = () => selectQuiz2Answer(q.id, opt);
+
+                    btn.className = getQuiz2ButtonClass(q.id, opt, q.correctAnswer);
+
+                    btn.textContent = opt;
+
+                    optGrid.appendChild(btn);
+
+                });
+
+                card.appendChild(optGrid);
+
+            } else if (state.currentView === 'quiz3') {
+
+                // Multiple Choice Multiple Selection (with manual verification button)
+
+                const optForm = document.createElement('form');
+
+                optForm.id = `q3-form-${q.id}`;
+
+                optForm.className = "grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5 mr-1";
+
+                
+
+                q.options.forEach((opt, idx) => {
+
+                    const label = document.createElement('label');
+
+                    const isChecked = savedAns && savedAns.selectedOptions.includes(opt);
+
+                    const isCorrectOption = q.correct.includes(opt);
+
+                    label.className = "option-label block p-3 rounded-xl flex items-center bg-slate-50 border-2 select-none ";
+
+                    
+
+                    if (isAnswered) {
+
+                        label.classList.add('pointer-events-none');
+
+                        if (isCorrectOption) {
+
+                            label.className += "bg-correct border-emerald-500 ";
+
+                        } else if (isChecked) {
+
+                            label.className += "bg-incorrect border-rose-500 ";
+
+                        } else {
+
+                            label.className += "bg-slate-100 border-slate-200 text-slate-300 ";
+
+                        }
+
+                    } else {
+
+                        if (isChecked) label.classList.add('border-indigo-500');
+
+                    }
+
+                    // Checkbox element
+
+                    const input = document.createElement('input');
+
+                    input.type = "checkbox";
+
+                    input.name = `q3-${q.id}`;
+
+                    input.value = opt;
+
+                    input.checked = isChecked || false;
+
+                    input.className = "option-input";
+
+                    
+
+                    input.onchange = function() {
+
+                        if (this.checked) {
+
+                            label.classList.add('border-indigo-500');
+
+                        } else {
+
+                            label.classList.remove('border-indigo-500');
+
+                        }
+
+                    };
+
+                    const indicator = document.createElement('span');
+
+                    indicator.className = "checked-indicator ml-3";
+
+                    const textSpan = document.createElement('span');
+
+                    textSpan.className = "english-text text-sm font-semibold flex-grow text-left";
+
+                    textSpan.textContent = opt;
+
+                    label.appendChild(input);
+
+                    label.appendChild(indicator);
+
+                    label.appendChild(textSpan);
+
+                    optForm.appendChild(label);
+
+                });
+
+                card.appendChild(optForm);
+
+                // Check answer action button
+
+                if (!isAnswered) {
+
+                    const checkBtn = document.createElement('button');
+
+                    checkBtn.onclick = (e) => { e.preventDefault(); submitQuiz3Answer(q.id); };
+
+                    checkBtn.className = "w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-3 rounded-xl shadow-md shadow-indigo-100 transition-all";
+
+                    checkBtn.textContent = "التحقق من الخيارات (الخطأ يأكل الصواب)";
+
+                    card.appendChild(checkBtn);
+
+                }
+
+            } else if (state.currentView === 'quiz4') {
+
+                // Translation Free text input
+
+                const textWrapper = document.createElement('div');
+
+                textWrapper.className = "mt-4 mr-1";
+
+                const textarea = document.createElement('textarea');
+
+                textarea.id = `answer-q4-${q.id}`;
+
+                textarea.rows = 2;
+
+                textarea.disabled = isAnswered;
+
+                textarea.className = "w-full p-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm " + 
+
+                                    (q.direction === "English to Arabic" ? "text-right" : "text-left english-text");
+
+                textarea.dir = q.direction === "English to Arabic" ? "rtl" : "ltr";
+
+                textarea.placeholder = "أدخل ترجمتك اللفظية الكاملة هنا...";
+
+                
+
+                if (isAnswered) {
+
+                    textarea.value = savedAns.text;
+
+                    textarea.classList.add('bg-slate-50', 'text-slate-500');
+
+                }
+
+                textWrapper.appendChild(textarea);
+
+                card.appendChild(textWrapper);
+
+                if (!isAnswered) {
+
+                    const submitBtn = document.createElement('button');
+
+                    submitBtn.onclick = () => submitQuiz4Translation(q.id);
+
+                    submitBtn.className = "w-full mt-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-2.5 rounded-xl shadow-md shadow-indigo-100 transition-all";
+
+                    submitBtn.textContent = "تأكيد وتقييم الترجمة";
+
+                    card.appendChild(submitBtn);
+
+                }
+
+            }
+
+            // 5. Arabized Translation & Hint block
+
+            const hintDiv = document.createElement('div');
+
+            hintDiv.id = `hint-${q.id}`;
+
+            hintDiv.className = `mt-4 p-3.5 bg-slate-50 border-r-4 border-indigo-400 rounded-l-xl text-slate-700 text-xs leading-relaxed ${revealHint ? 'block' : 'hidden'}`;
+
+            
+
+            if (state.currentView !== 'quiz4') {
+
+                hintDiv.innerHTML = `<strong>الترجمة والتوضيح العربي:</strong> <span class="font-medium mr-1">${q.hint || q.translation}</span>`;
+
+            } else {
+
+                const solutionText = q.direction === "English to Arabic" ? q.correct_ar.join(" / ") : q.correct_en.join(" / ");
+
+                hintDiv.innerHTML = `<strong>الترجمة النموذجية المقبولة:</strong> <span class="english-text font-semibold text-indigo-700 text-xs tracking-wide mr-1 ${q.direction === 'English to Arabic' ? '' : 'text-left block'}" dir="${q.direction === 'English to Arabic' ? 'rtl' : 'ltr'}">${solutionText}</span>`;
+
+            }
+
+            card.appendChild(hintDiv);
+
+            // 6. Inline Result Feedback banner
+
+            if (isAnswered) {
+
+                const feedback = document.createElement('div');
+
+                let isFull = false;
+
+                let text = "";
+
+                if (state.currentView === 'quiz1' || state.currentView === 'quiz2') {
+
+                    isFull = savedAns.isCorrect;
+
+                    text = isFull ? "ممتاز! إجابة صحيحة وصائبة تماماً." : `للأسف خاطئة. الإجابة الصحيحة هي: (${q.correctAnswer === 'TRUE' ? 'صحيح' : q.correctAnswer}).`;
+
+                } else if (state.currentView === 'quiz3') {
+
+                    isFull = savedAns.score === 2;
+
+                    text = isFull ? "ممتاز! تم تحديد جميع الخيارات الصحيحة بدقة." : `درجة جزئية: ${savedAns.score} من 2. (الخيارات الصحيحة: ${q.correct.join(', ')}).`;
+
+                } else if (state.currentView === 'quiz4') {
+
+                    isFull = savedAns.score === 5;
+
+                    text = isFull ? "رائع! ترجمة نموذجية مطابقة بنسبة 100%." : 
+
+                           savedAns.score > 0 ? "ترجمة جزئية تحتوي على المفاهيم والكلمات المفتاحية الأساسية." : "الترجمة المدخلة بعيدة عن السياق النموذجي المعتمد.";
+
+                }
+
+                feedback.className = `mt-4 flex items-center gap-2 text-xs font-bold mr-1 ${isFull ? 'text-emerald-600' : 'text-rose-500'}`;
+
+                feedback.innerHTML = `
+
+                    <span class="flex items-center justify-center w-5 h-5 rounded-full ${isFull ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-500'}">
+
+                        ${isFull ? '✓' : '✗'}
+
+                    </span>
+
+                    <span>${text}</span>
+
+                `;
+
+                card.appendChild(feedback);
+
+            }
+
+            return card;
+
+        }
+
+        function getQuiz1ButtonClass(questionId, optionValue, correctValue) {
+
+            const answer = state.userAnswers.quiz1[questionId];
+
+            let base = "flex-1 flex items-center justify-between px-4 py-3 border-2 rounded-xl transition-all focus:outline-none ";
+
+            if (answer === undefined) {
+
+                base += "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 active:scale-[0.98]";
+
+            } else {
+
+                const isSelected = answer.selectedValue === optionValue;
+
+                const isCorrect = correctValue === optionValue;
+
+                base += "pointer-events-none ";
+
+                if (isSelected) {
+
+                    base += answer.isCorrect ? "bg-emerald-500 border-emerald-500 text-white font-bold shadow-md" : "bg-rose-500 border-rose-500 text-white font-bold shadow-md";
+
+                } else {
+
+                    base += isCorrect ? "bg-emerald-50 border-emerald-200 text-emerald-800 border-dashed" : "bg-slate-50 border-slate-100 text-slate-300";
+
+                }
+
+            }
+
+            return base;
+
+        }
+
+        function getQuiz2ButtonClass(questionId, optionValue, correctValue) {
+
+            const answer = state.userAnswers.quiz2[questionId];
+
+            let base = "flex-1 flex items-center justify-between px-4 py-3 border-2 rounded-xl transition-all focus:outline-none text-left english-text font-medium text-sm ";
+
+            if (answer === undefined) {
+
+                base += "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 active:scale-[0.98]";
+
+            } else {
+
+                const isSelected = answer.selectedAnswer === optionValue;
+
+                const isCorrect = correctValue === optionValue;
+
+                base += "pointer-events-none ";
+
+                if (isSelected) {
+
+                    base += answer.isCorrect ? "bg-emerald-500 border-emerald-500 text-white font-bold shadow-md" : "bg-rose-500 border-rose-500 text-white font-bold shadow-md";
+
+                } else {
+
+                    base += isCorrect ? "bg-emerald-50 border-emerald-200 text-emerald-800 border-dashed" : "bg-slate-50 border-slate-100 text-slate-300";
+
+                }
+
+            }
+
+            return base;
+
+        }
+
+        function toggleActiveHints() {
+
+            const enabled = document.getElementById('hints-toggle').checked;
+
+            const list = state.currentView === 'quiz1' ? db_quiz1 :
+
+                         state.currentView === 'quiz2' ? db_quiz2 :
+
+                         state.currentView === 'quiz3' ? db_quiz3 : db_quiz4;
+
+            list.forEach(q => {
+
+                const el = document.getElementById(`hint-${q.id}`);
+
+                const isAnswered = state.userAnswers[state.currentView][q.id] !== undefined;
+
+                if (el) {
+
+                    if (enabled || isAnswered) el.classList.remove('hidden');
+
+                    else el.classList.add('hidden');
+
+                }
+
+            });
+
+        }
+
+        // UNIFIED TOAST NOTIFICATION
+
+        function showToast(title, desc, isSuccess = true) {
+
+            const toast = document.getElementById('toast-notification');
+
+            const toastTitle = document.getElementById('toast-title');
+
+            const toastDesc = document.getElementById('toast-desc');
+
+            const wrapper = document.getElementById('toast-icon-wrapper');
+
+            toastTitle.textContent = title;
+
+            toastDesc.textContent = desc;
+
+            if (isSuccess) {
+
+                wrapper.className = "p-1.5 bg-emerald-500 text-white rounded-lg";
+
+            } else {
+
+                wrapper.className = "p-1.5 bg-rose-500 text-white rounded-lg";
+
+            }
+
+            toast.classList.remove('hidden', 'translate-y-10', 'opacity-0');
+
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(window.toastTimer);
+
+            window.toastTimer = setTimeout(hideToast, 4000);
+
+        }
+
+        function hideToast() {
+
+            const toast = document.getElementById('toast-notification');
+
+            toast.classList.remove('translate-y-0', 'opacity-100');
+
+            toast.classList.add('translate-y-10', 'opacity-0');
+
+            setTimeout(() => toast.classList.add('hidden'), 300);
+
+        }
+
+        // WINDOW ONLOAD INITIALIZER
+
+        window.onload = function() {
+
+            loadProgressFromLocalStorage();
+
+            updateDashboardStats();
+
+            navigateTo('home');
+
         };
+
+        window.addEventListener('resize', () => {
+
+            const canvas = document.getElementById('confetti-canvas');
+
+            if (canvas) {
+
+                canvas.width = window.innerWidth;
+
+                canvas.height = window.innerHeight;
+
+            }
+
+        });
+
     </script>
+
 </body>
-</html>
-    
-  </body>
-  
+
 </html>
