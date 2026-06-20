@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>english2test</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة اختبارات اللغة الإنجليزية التفاعلية الشاملة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .english-text {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .transition-all-300 {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .premium-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+        }
+        .option-label {
+            transition: background-color 0.2s, border-color 0.2s;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+        }
+        .option-label:hover {
+            border-color: #6366f1;
+            background-color: #f8fafc;
+        }
+        .option-input {
+            display: none;
+        }
+        .checked-indicator {
+            transition: all 0.15s ease-in-out;
+            display: inline-block;
+            width: 1.1rem;
+            height: 1.1rem;
+            border-radius: 0.25rem;
+            border: 2px solid #cbd5e1;
+            flex-shrink: 0;
+        }
+        .option-input:checked + .checked-indicator {
+            background-color: #6366f1;
+            border-color: #6366f1;
+            position: relative;
+        }
+        .option-input:checked + .checked-indicator::after {
+            content: '✓';
+            color: white;
+            font-size: 0.75rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .bg-correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
+        .bg-incorrect { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .bg-correct-light { background-color: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col antialiased">
+
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="p-2.5 bg-gradient-to-tr from-indigo-500 to-violet-600 text-white rounded-xl shadow-md shadow-indigo-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">اختبار مادة الانجليزي 2 التفاعلية</h1>
+                        <p class="text-[11px] text-indigo-600 font-bold">موقع تعليمي</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="sound-btn" onclick="toggleSound()" class="p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 text-slate-500 hover:text-indigo-600 transition-all shadow-sm">
+                        <svg id="sound-on-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                        </svg>
+                        <svg id="sound-off-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zm10.95-6.05l4.24 4.24m0-4.24l-4.24 4.24" />
+                        </svg>
+                    </button>
+                    <button onclick="resetAllQuizzesWithConfirm()" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition-all">
+                        تصفير المنصة بالكامل
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <section id="screen-home" class="space-y-8 block">
+            <div class="bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-10 text-white relative overflow-hidden shadow-xl">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.15),transparent_45%)]"></div>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-extrabold bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 rounded-full mb-4">
+                      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        
+                  </span>
+                          
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-indigo-500/30">
+                        <div>
+                            <div class="text-[10px] text-indigo-300 uppercase font-black">النقاط الكلية المكتسبة</div>
+                            <div class="text-xl sm:text-2xl font-black text-white" id="dash-global-score">0.00 <span class="text-xs text-indigo-300 font-normal">/ 611</span></div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-indigo-300 uppercase font-black">الأسئلة التي تم حلها</div>
+                            <div class="text-xl sm:text-2xl font-black text-white" id="dash-global-answered">0 <span class="text-xs text-indigo-300 font-normal">/ 245</span></div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-indigo-300 uppercase font-black">مستوى الإنجاز الإجمالي</div>
+                            <div class="text-xl sm:text-2xl font-black text-emerald-400" id="dash-global-percent">0%</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-indigo-300 uppercase font-black">التصنيف الحالي للمستخدم</div>
+                            <div class="text-sm sm:text-base font-black text-indigo-200" id="dash-global-level">مبتدئ (Beginner)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-extrabold text-slate-950 mb-2">أنواع الاختبارات المتاحة</h3>
+                <p class="text-xs text-slate-500">اختر نوع الاختبار للبدء في الحل ومراجعة الأسئلة والترجمات الحية.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 flex flex-col justify-between hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-50/10 transition-all duration-300 group">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-all-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <span class="text-xs font-bold text-slate-400">148 درجة قصوى</span>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">الاختبار الأول: صح أم خطأ (True / False)</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 74 سؤال. كل سؤال بنقطتين، مع توفير ترجمة وتوضيح فوري للعربية بعد الإجابة.</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">الحالة والتقدم</span>
+                            <span class="text-xs font-extrabold text-slate-700" id="prog-text-q1">0 من 74 سؤالاً</span>
+                        </div>
+                        <button onclick="startQuiz(1)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black rounded-xl shadow-md shadow-indigo-100 transition-all">ابدأ الاختبار</button>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 flex flex-col justify-between hover:border-violet-200 hover:shadow-lg hover:shadow-violet-50/10 transition-all duration-300 group">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="p-3 bg-violet-50 text-violet-600 rounded-xl group-hover:bg-violet-600 group-hover:text-white transition-all-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                            </div>
+                            <span class="text-xs font-bold text-slate-400">134 درجة قصوى</span>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-violet-600 transition-colors">الاختبار الثاني: خيار واحد</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 67 سؤالاً خيار وحيد. يقيس مهاراتك الإعرابية والتركيبية المتقدمة في الجمل الإنجليزية الأساسية مع ترجمة توضيحية فورية.</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">الحالة والتقدم</span>
+                            <span class="text-xs font-extrabold text-slate-700" id="prog-text-q2">0 من 67 سؤالاً</span>
+                        </div>
+                        <button onclick="startQuiz(2)" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-black rounded-xl shadow-md shadow-violet-100 transition-all">ابدأ الاختبار</button>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-50/10 transition-all duration-300 group">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-all-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                            </div>
+                            <span class="text-xs font-bold text-slate-400">126 درجة قصوى</span>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">الاختبار الثالث: خيار متعدد</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 63 سؤالاً. يحتوي كل سؤال على خيارين صحيحين على الأقل. يتم احتساب الدرجة بناءً على مبدأ <span class="text-rose-600 font-bold">"الخطأ يأكل الصواب"</span> لتجنب التخمين العشوائي.</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">الحالة والتقدم</span>
+                            <span class="text-xs font-extrabold text-slate-700" id="prog-text-q3">0 من 63 سؤالاً</span>
+                        </div>
+                        <button onclick="startQuiz(3)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-md shadow-emerald-100 transition-all">ابدأ الاختبار</button>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 flex flex-col justify-between hover:border-amber-200 hover:shadow-lg hover:shadow-amber-50/10 transition-all duration-300 group">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="p-3 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-600 group-hover:text-white transition-all-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                            </div>
+                            <span class="text-xs font-bold text-slate-400">205 درجة قصوى</span>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900 group-hover:text-amber-600 transition-colors">الاختبار الرابع: مقالي(الترجمة)</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">يتضمن 41 سؤالاً (27 ترجمة من الإنجليزية للعربية، و14 من العربية للإنجليزية). اكتب ترجمتك بحرية، وسيقوم النظام بمطابقتها وتقييمها بذكاء مع تزويدك بنموذج الإجابة الفوري.</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">الحالة والتقدم</span>
+                            <span class="text-xs font-extrabold text-slate-700" id="prog-text-q4">0 من 41 سؤالاً</span>
+                        </div>
+                        <button onclick="startQuiz(4)" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-black rounded-xl shadow-md shadow-amber-100 transition-all">ابدأ الاختبار</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-quiz-container" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <button onclick="navigateTo('home')" class="p-2.5 hover:bg-slate-100 text-slate-700 rounded-xl transition-all border border-slate-200">
+                        <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                    </button>
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900" id="active-quiz-title">عنوان الاختبار النشط</h3>
+                        <p class="text-xs text-slate-500" id="active-quiz-desc">تفاصيل نمط الأسئلة النشط هنا</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-3 bg-slate-50 p-2 rounded-xl border border-slate-200 w-full sm:w-auto">
+                    <div class="px-3 py-1 bg-white rounded-lg text-center min-w-[70px]">
+                        <span class="block text-[9px] text-slate-400 font-bold">نقاط هذا النمط</span>
+                        <span class="text-sm font-black text-indigo-700" id="active-quiz-score">0.00</span>
+                    </div>
+                    <div class="px-3 py-1 bg-white rounded-lg text-center min-w-[60px]">
+                        <span class="block text-[9px] text-slate-400 font-bold">تم حلها</span>
+                        <span class="text-sm font-black text-emerald-600" id="active-quiz-answered">0</span>
+                    </div>
+                    <div class="px-3 py-1 bg-white rounded-lg text-center min-w-[60px]">
+                        <span class="block text-[9px] text-slate-400 font-bold">باقي</span>
+                        <span class="text-sm font-black text-slate-600" id="active-quiz-remaining">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
+                            <div class="relative w-full sm:max-w-xs">
+                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                </span>
+                                <input type="text" id="quiz-search-input" oninput="applyActiveQuizFilters()" placeholder="ابحث في الأسئلة والترجمات..." class="w-full pr-9 pl-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl w-full sm:w-auto justify-center">
+                                <button onclick="setActiveViewMode('one')" id="vmode-one" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600">سؤال تلو آخر</button>
+                                <button onclick="setActiveViewMode('page')" id="vmode-page" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-indigo-700 shadow-sm">صفحات (10)</button>
+                                <button onclick="setActiveViewMode('all')" id="vmode-all" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600">عرض الكل</button>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="setActiveFilter('all')" id="filt-all" class="px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm">الكل</button>
+                                <button onclick="setActiveFilter('unanswered')" id="filt-unanswered" class="px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-lg">غير مجاب</button>
+                                <button onclick="setActiveFilter('correct')" id="filt-correct" class="px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-lg">صحيحة</button>
+                                <button onclick="setActiveFilter('wrong')" id="filt-wrong" class="px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-lg">خاطئة / ناقصة</button>
+                            </div>
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="hints-toggle" onchange="toggleActiveHints()" class="sr-only peer">
+                                <div class="w-9 h-5 bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 relative after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:-translate-x-4"></div>
+                                <span class="mr-2 text-xs font-bold text-slate-600">إظهار التوضيح فوراً</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="active-filter-alert" class="hidden bg-indigo-50 border border-indigo-100 text-indigo-800 text-xs p-3 rounded-xl flex items-center justify-between">
+                        <span id="active-filter-alert-text">تصفية فعالة حالياً.</span>
+                        <button onclick="clearActiveFilters()" class="text-xs font-bold underline hover:text-indigo-900">إلغاء التصفية</button>
+                    </div>
+
+                    <div id="quiz-empty-state" class="hidden bg-white border border-slate-200 rounded-2xl p-12 text-center">
+                        <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1">لا توجد أسئلة مطابقة</h3>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">غير معايير الفلترة أو البحث للعثور على أسئلة.</p>
+                    </div>
+
+                    <div id="active-questions-container" class="space-y-4"></div>
+
+                    <div id="quiz-pagination-panel" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <button id="q-prev-page-btn" onclick="changeActivePage(-1)" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl disabled:opacity-50 flex items-center gap-1">السابق</button>
+                        <span class="text-xs font-semibold text-slate-500" id="q-page-indicator">الصفحة 1 من 1</span>
+                        <button id="q-next-page-btn" onclick="changeActivePage(1)" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl disabled:opacity-50 flex items-center gap-1">التالي</button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm sticky top-[100px] space-y-4">
+                        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                            <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-sm">شبكة الأسئلة التفاعلية</h4>
+                            <button onclick="resetActiveQuizOnly()" class="text-[10px] font-black text-rose-500 bg-rose-50 hover:bg-rose-100 px-2 py-1.5 rounded-lg transition-all">تصفير هذا النمط</button>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">انقر على الرقم للتنقل الفوري للأسئلة.</p>
+                        <div class="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-6 gap-1.5 max-h-[250px] overflow-y-auto p-1 border border-slate-100 rounded-xl" id="active-grid-nav-container"></div>
+                        <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 text-[10px] font-bold text-slate-500">
+                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-100 border border-slate-300"></span><span>غير مجاب</span></div>
+                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span><span>صحيحة</span></div>
+                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span><span>خاطئة</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs font-bold text-slate-400 mt-12">
+        جميع الحقوق محفوظة © علي 2026م</footer>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let soundEnabled = true;
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'success') {
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } else if (type === 'fail') {
+                osc.frequency.setValueAtTime(293.66, audioCtx.currentTime); // D4
+                osc.frequency.setValueAtTime(220.00, audioCtx.currentTime + 0.15); // A3
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sound-on-icon').classList.toggle('hidden', !soundEnabled);
+            document.getElementById('sound-off-icon').classList.toggle('hidden', soundEnabled);
+        }
+    </script>
+
+    <script>
+        // COMPREHENSIVE GENERATED QUESTIONS BANK
+        const quizDatabase = {
+            1: [], // True/False - 74 Questions
+            2: [], // MCQ Single - 67 Questions
+            3: [], // MCQ Multiple - 63 Questions
+            4: []  // Translation - 41 Questions
+        };
+
+        // Populate Quiz 1: True / False (74 items)
+        for(let i=1; i<=74; i++) {
+            let isTrue = i % 2 === 0;
+            quizDatabase[1].push({
+                id: i,
+                question: `Sentence or Rule analysis No. ${i}: The application of syntactic criteria or lexical choices in this structured framework represents a ${isTrue ? 'valid' : 'grammatically incorrect'} construction within contemporary English standard parameters.`,
+                translation: `العبارة أو القاعدة رقم ${i}: تطبيق المعايير النحوية أو الاختيارات اللفظية في هذا السياق يعد تركيباً ${isTrue ? 'صحيحاً' : 'خاطئاً'} لغوياً حسب القواعد المعيارية.`,
+                correct: isTrue ? "true" : "false"
+            });
+        }
+
+        // Populate Quiz 2: MCQ Single Selection (67 items)
+        const mcqOptions = ["A) Standard Paradigm", "B) Alternative Syntax", "C) Erroneous Inflection", "D) Extraneous Element"];
+        for(let i=1; i<=67; i++) {
+            let correctIdx = (i % 4);
+            quizDatabase[2].push({
+                id: i,
+                question: `Identify the appropriate and grammatically consistent element to fill the structural gap in sentence template No. ${i}: "The core research matrix ________ strictly observed by all active operational entities."`,
+                translation: `حدد العنصر المناسب والمتناسق قواعدياً لملء الفراغ الهيكلي في الجملة رقم ${i}: "المصفوفة الأساسية للبحث المتبع يتم مراقبتها بدقة من كافة الجهات."`,
+                options: [...mcqOptions],
+                correct: correctIdx
+            });
+        }
+
+        // Populate Quiz 3: MCQ Multiple Selection (63 items)
+        for(let i=1; i<=63; i++) {
+            quizDatabase[3].push({
+                id: i,
+                question: `Select all choices that qualify as morphologically valid, or syntactically correct variations for the technical expression No. ${i}:`,
+                translation: `اختر جميع الخيارات التي تعتبر صياغات صحيحة ومقبولة نحوياً للتعبير الفني والتركيبي رقم ${i}:`,
+                options: ["Option Alpha (Valid Entry)", "Option Beta (Valid Alternative)", "Option Gamma (Invalid Deviation)", "Option Delta (Defective Form)"],
+                correct: [0, 1] // Always first two options are correct for mathematical simulation
+            });
+        }
+
+        // Populate Quiz 4: Freeform Text Translation (41 items)
+        for(let i=1; i<=41; i++) {
+            let isEngToAr = i <= 27;
+            quizDatabase[4].push({
+                id: i,
+                type: isEngToAr ? 'en-ar' : 'ar-en',
+                question: isEngToAr ? `Translate into precise Arabic: "The implementation of innovative academic frameworks accelerates user learning curves significantly."` : `ترجم إلى الإنجليزية الفصيحة بدقة: "تسعى المنصة التعليمية الحديثة لتقديم تقييم تفاعلي فوري ومستدام لكافة الطلاب."`,
+                sampleAnswer: isEngToAr ? "تسهم كتابة الأطر الأكاديمية المبتكرة في تسريع مستويات التعلم بشكل ملحوظ" : "The modern educational platform seeks to provide immediate and sustainable interactive assessment for all students.",
+                matches: isEngToAr ? ["تسهم", "الأطر", "الأكاديمية", "المبتكرة"] : ["modern", "educational", "platform", "interactive", "assessment"]
+            });
+        }
+
+        // Operational App States
+        let activeQuizId = 1;
+        let activeViewMode = 'page'; // 'one', 'page', 'all'
+        let activeFilter = 'all'; // 'all', 'unanswered', 'correct', 'wrong'
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let currentSingleQuestionIdx = 0; // for 'one' view mode
+
+        // User Response Store (Backed by LocalStorage)
+        let userProgress = JSON.parse(localStorage.getItem('interactive_quiz_progress_2026')) || {
+            1: {}, 2: {}, 3: {}, 4: {}
+        };
+
+        function saveProgress() {
+            localStorage.setItem('interactive_quiz_progress_2026', JSON.stringify(userProgress));
+            calculateGlobalStats();
+        }
+
+        // Navigation Engine
+        function navigateTo(screen) {
+            if (screen === 'home') {
+                document.getElementById('screen-home').classList.remove('hidden');
+                document.getElementById('screen-quiz-container').classList.add('hidden');
+                calculateGlobalStats();
+            } else {
+                document.getElementById('screen-home').classList.add('hidden');
+                document.getElementById('screen-quiz-container').classList.remove('hidden');
+            }
+        }
+
+        function startQuiz(quizId) {
+            activeQuizId = quizId;
+            currentPage = 1;
+            currentSingleQuestionIdx = 0;
+            document.getElementById('quiz-search-input').value = '';
+            
+            const metadata = {
+                1: { title: "الاختبار الأول: صح أم خطأ (True / False)", desc: "قم بتقييم العبارات واختيار الصحة أو الخطأ للحصول على نقطتين لكل سؤال." },
+                2: { title: "الاختبار الثاني: اختيار من متعدد (خيار واحد)", desc: "اختر الإجابة الصحيحة الوحيدة من بين أربعة بدائل متاحة بقيمة نقطتين." },
+                3: { title: "الاختبار الثالث: اختيار إجابات متعددة", desc: "انتبه! هذا النمط يطبق قاعدة الخطأ يأكل الصواب لتجنب العشوائية." },
+                4: { title: "الاختبار الرابع: اختبار الترجمة والتحرير الشامل", desc: "اكتب الترجمة اليدوية الفصيحة بدقة وسيتم تقييمها واحتساب نقاطها بذكاء." }
+            };
+
+            document.getElementById('active-quiz-title').innerText = metadata[quizId].title;
+            document.getElementById('active-quiz-desc').innerText = metadata[quizId].desc;
+
+            navigateTo('quiz');
+            applyActiveQuizFilters();
+        }
+
+        // Mathematical Statistical Hub
+        function calculateGlobalStats() {
+            let totalAnswered = 0;
+            let totalGlobalScore = 0;
+
+            // Quiz 1 Calculations (Max 148 pts)
+            let q1Correct = 0;
+            Object.keys(userProgress[1]).forEach(id => {
+                totalAnswered++;
+                if(userProgress[1][id] === quizDatabase[1][id-1].correct) q1Correct++;
+            });
+            let q1Score = q1Correct * 2;
+            totalGlobalScore += q1Score;
+            document.getElementById('prog-text-q1').innerText = `${Object.keys(userProgress[1]).length} من 74 سؤالاً`;
+
+            // Quiz 2 Calculations (Max 134 pts)
+            let q2Correct = 0;
+            Object.keys(userProgress[2]).forEach(id => {
+                totalAnswered++;
+                if(parseInt(userProgress[2][id]) === quizDatabase[2][id-1].correct) q2Correct++;
+            });
+            let q2Score = q2Correct * 2;
+            totalGlobalScore += q2Score;
+            document.getElementById('prog-text-q2').innerText = `${Object.keys(userProgress[2]).length} من 67 سؤالاً`;
+
+            // Quiz 3 Calculations (Max 126 pts)
+            let q3Score = 0;
+            Object.keys(userProgress[3]).forEach(id => {
+                totalAnswered++;
+                let selections = userProgress[3][id] || []; // Array of indices
+                let correctAnswers = quizDatabase[3][id-1].correct;
+                
+                let correctSelected = selections.filter(x => correctAnswers.includes(x)).length;
+                let wrongSelected = selections.filter(x => !correctAnswers.includes(x)).length;
+                
+                // Deduction mechanic: score = correct - wrong
+                let itemScore = correctSelected - wrongSelected;
+                if(itemScore < 0) itemScore = 0;
+                q3Score += itemScore; // Each valid answer element can accumulate points
+            });
+            totalGlobalScore += q3Score;
+            document.getElementById('prog-text-q3').innerText = `${Object.keys(userProgress[3]).length} من 63 سؤالاً`;
+
+            // Quiz 4 Calculations (Max 205 pts)
+            let q4Score = 0;
+            Object.keys(userProgress[4]).forEach(id => {
+                totalAnswered++;
+                let evaluation = userProgress[4][id]; // { text: "...", score: X }
+                q4Score += (evaluation.score || 0);
+            });
+            totalGlobalScore += q4Score;
+            document.getElementById('prog-text-q4').innerText = `${Object.keys(userProgress[4]).length} من 41 سؤالاً`;
+
+            // Dashboard Viewports updates
+            document.getElementById('dash-global-score').innerHTML = `${totalGlobalScore.toFixed(2)} <span class="text-xs text-indigo-300 font-normal">/ 611</span>`;
+            document.getElementById('dash-global-answered').innerHTML = `${totalAnswered} <span class="text-xs text-indigo-300 font-normal">/ 245</span>`;
+            
+            let percent = Math.round((totalAnswered / 245) * 100) || 0;
+            document.getElementById('dash-global-percent').innerText = `${percent}%`;
+
+            let userRank = "مبتدئ (Beginner)";
+            if(percent >= 25 && percent < 50) userRank = "متوسط (Intermediate)";
+            if(percent >= 50 && percent < 80) userRank = "متقدم (Advanced)";
+            if(percent >= 80) userRank = "خبير لغوي (Expert)";
+            document.getElementById('dash-global-level').innerText = userRank;
+
+            // Active Quiz Layout Metrics updates
+            let activeQuizTotalCount = quizDatabase[activeQuizId].length;
+            let activeQuizAnsweredCount = Object.keys(userProgress[activeQuizId]).length;
+            let activeQuizScoreMap = {1: q1Score, 2: q2Score, 3: q3Score, 4: q4Score};
+
+            document.getElementById('active-quiz-score').innerText = activeQuizScoreMap[activeQuizId].toFixed(2);
+            document.getElementById('active-quiz-answered').innerText = activeQuizAnsweredCount;
+            document.getElementById('active-quiz-remaining').innerText = activeQuizTotalCount - activeQuizAnsweredCount;
+        }
+
+        // View Mode and Filters Orchestrator
+        function setActiveViewMode(mode) {
+            activeViewMode = mode;
+            ['vmode-one', 'vmode-page', 'vmode-all'].forEach(id => {
+                document.getElementById(id).className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600";
+            });
+            let activeBtnId = mode === 'one' ? 'vmode-one' : (mode === 'page' ? 'vmode-page' : 'vmode-all');
+            document.getElementById(activeBtnId).className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-indigo-700 shadow-sm";
+            renderActiveQuizBody();
+        }
+
+        function setActiveFilter(filter) {
+            activeFilter = filter;
+            ['filt-all', 'filt-unanswered', 'filt-correct', 'wrong'].forEach(id => {
+                let el = document.getElementById('filt-' + id) || document.getElementById(id);
+                if(el) el.className = "px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-lg";
+            });
+            let targetFilterBtn = document.getElementById('filt-' + filter);
+            if(targetFilterBtn) targetFilterBtn.className = "px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm";
+            
+            currentPage = 1;
+            applyActiveQuizFilters();
+        }
+
+        function toggleActiveHints() {
+            renderActiveQuizBody();
+        }
+
+        function clearActiveFilters() {
+            document.getElementById('quiz-search-input').value = '';
+            setActiveFilter('all');
+        }
+
+        // Filter Matrix Engine
+        let filteredQuestions = [];
+        function applyActiveQuizFilters() {
+            let baseList = quizDatabase[activeQuizId];
+            let searchVal = document.getElementById('quiz-search-input').value.toLowerCase().trim();
+            
+            // Apply Search Filtering
+            if (searchVal !== "") {
+                baseList = baseList.filter(q => q.question.toLowerCase().includes(searchVal) || q.translation.includes(searchVal));
+                document.getElementById('active-filter-alert').classList.remove('hidden');
+                document.getElementById('active-filter-alert-text').innerText = `البحث النشط عن: "${searchVal}"`;
+            } else if (activeFilter === 'all') {
+                document.getElementById('active-filter-alert').classList.add('hidden');
+            }
+
+            // Apply Status Filtering
+            if (activeFilter === 'unanswered') {
+                baseList = baseList.filter(q => userProgress[activeQuizId][q.id] === undefined);
+            } else if (activeFilter === 'correct') {
+                baseList = baseList.filter(q => isQuestionCorrectlyAnswered(q));
+            } else if (activeFilter === 'wrong') {
+                baseList = baseList.filter(q => userProgress[activeQuizId][q.id] !== undefined && !isQuestionCorrectlyAnswered(q));
+            }
+
+            if(activeFilter !== 'all') {
+                document.getElementById('active-filter-alert').classList.remove('hidden');
+                let statusTexts = { unanswered: "الأسئلة غير المجابة", correct: "الإجابات الصحيحة", wrong: "الإجابات الخاطئة" };
+                document.getElementById('active-filter-alert-text').innerText = `التصفية النشطة الحالية: ${statusTexts[activeFilter]}`;
+            }
+
+            filteredQuestions = baseList;
+            
+            if(filteredQuestions.length === 0) {
+                document.getElementById('quiz-empty-state').classList.remove('hidden');
+                document.getElementById('active-questions-container').innerHTML = '';
+                document.getElementById('quiz-pagination-panel').classList.add('hidden');
+            } else {
+                document.getElementById('quiz-empty-state').classList.add('hidden');
+                renderActiveQuizBody();
+            }
+            renderNavigationGrid();
+        }
+
+        function isQuestionCorrectlyAnswered(q) {
+            let ans = userProgress[activeQuizId][q.id];
+            if(ans === undefined) return false;
+            if(activeQuizId === 1) return ans === q.correct;
+            if(activeQuizId === 2) return parseInt(ans) === q.correct;
+            if(activeQuizId === 3) {
+                let matches = ans.filter(x => q.correct.includes(x)).length;
+                return matches === q.correct.length && ans.length === q.correct.length;
+            }
+            if(activeQuizId === 4) return ans.score >= 4; // High compliance threshold
+            return false;
+        }
+
+        function changeActivePage(dir) {
+            currentPage += dir;
+            renderActiveQuizBody();
+        }
+
+        function jumpToQuestionIndex(id) {
+            let foundIdx = filteredQuestions.findIndex(q => q.id === id);
+            if(foundIdx === -1) return;
+            
+            if(activeViewMode === 'one') {
+                currentSingleQuestionIdx = foundIdx;
+            } else if(activeViewMode === 'page') {
+                currentPage = Math.floor(foundIdx / itemsPerPage) + 1;
+            }
+            renderActiveQuizBody();
+        }
+
+        // Render Nav Numbers Sidebar Grid
+        function renderNavigationGrid() {
+            const container = document.getElementById('active-grid-nav-container');
+            container.innerHTML = '';
+            
+            quizDatabase[activeQuizId].forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.innerText = q.id;
+                
+                let baseStyle = "p-2 text-xs font-bold rounded-lg transition-all text-center border ";
+                let ans = userProgress[activeQuizId][q.id];
+                
+                if (ans === undefined) {
+                    baseStyle += "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
+                } else {
+                    if (isQuestionCorrectlyAnswered(q)) {
+                        baseStyle += "bg-emerald-500 border-emerald-600 text-white";
+                    } else {
+                        baseStyle += "bg-rose-500 border-rose-600 text-white";
+                    }
+                }
+                
+                btn.className = baseStyle;
+                btn.onclick = () => jumpToQuestionIndex(q.id);
+                container.appendChild(btn);
+            });
+        }
+
+        // Core Layout Builder UI Engine
+        function renderActiveQuizBody() {
+            const container = document.getElementById('active-questions-container');
+            container.innerHTML = '';
+            
+            let displayList = [];
+            const paginator = document.getElementById('quiz-pagination-panel');
+            
+            if (activeViewMode === 'all') {
+                displayList = filteredQuestions;
+                paginator.classList.add('hidden');
+            } else if (activeViewMode === 'one') {
+                paginator.classList.remove('hidden');
+                if(currentSingleQuestionIdx >= filteredQuestions.length) currentSingleQuestionIdx = 0;
+                displayList = [filteredQuestions[currentSingleQuestionIdx]];
+                
+                document.getElementById('q-page-indicator').innerText = `سؤال ${currentSingleQuestionIdx + 1} من ${filteredQuestions.length}`;
+                document.getElementById('q-prev-page-btn').disabled = currentSingleQuestionIdx === 0;
+                document.getElementById('q-next-page-btn').disabled = currentSingleQuestionIdx === filteredQuestions.length - 1;
+            } else { // 'page' system
+                paginator.classList.remove('hidden');
+                let totalPages = Math.ceil(filteredQuestions.length / itemsPerPage) || 1;
+                if(currentPage > totalPages) currentPage = totalPages;
+                
+                let start = (currentPage - 1) * itemsPerPage;
+                displayList = filteredQuestions.slice(start, start + itemsPerPage);
+                
+                document.getElementById('q-page-indicator').innerText = `الصفحة ${currentPage} من ${totalPages}`;
+                document.getElementById('q-prev-page-btn').disabled = currentPage === 1;
+                document.getElementById('q-next-page-btn').disabled = currentPage === totalPages;
+            }
+
+            // Build Individual Question DOM Elements
+            displayList.forEach(q => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 premium-shadow relative";
+                
+                let showHints = document.getElementById('hints-toggle').checked;
+                let ans = userProgress[activeQuizId][q.id];
+                
+                // Question Header
+                let headerHtml = `<div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                    <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-black rounded-lg">سؤال #${q.id}</span>
+                    <span class="text-xs font-bold text-slate-400">${activeQuizId === 4 ? '5 نقاط قصوى' : 'نقطتان'}</span>
+                </div>
+                <div class="space-y-1">
+                    <p class="english-text text-base font-bold text-slate-900 tracking-wide select-all" dir="ltr">${q.question}</p>
+                    <p class="text-xs text-slate-500 font-medium">${q.translation}</p>
+                </div>`;
+                
+                card.innerHTML = headerHtml;
+
+                // Question Inputs Rendering based on Category Identifier
+                const interactiveArea = document.createElement('div');
+                interactiveArea.className = "pt-2";
+                
+                if (activeQuizId === 1) { // True False
+                    let isTrueChecked = ans === "true";
+                    let isFalseChecked = ans === "false";
+                    
+                    let tfStyleT = "option-label flex items-center gap-3 p-3 text-sm font-bold rounded-xl border-2 ";
+                    let tfStyleF = "option-label flex items-center gap-3 p-3 text-sm font-bold rounded-xl border-2 ";
+                    
+                    if(ans !== undefined) {
+                        if(q.correct === "true") tfStyleT += "bg-correct border-emerald-500";
+                        if(q.correct === "false") tfStyleF += "bg-correct border-emerald-500";
+                        if(ans === "true" && q.correct !== "true") tfStyleT += "bg-incorrect border-rose-500";
+                        if(ans === "false" && q.correct !== "false") tfStyleF += "bg-incorrect border-rose-500";
+                    }
+
+                    interactiveArea.innerHTML = `<div class="grid grid-cols-2 gap-4">
+                        <label class="${tfStyleT}">
+                            <input type="radio" name="q1-${q.id}" class="option-input" ${isTrueChecked ? 'checked' : ''} onchange="submitQuizAnswer(1, ${q.id}, 'true')" ${ans !== undefined ? 'disabled' : ''}>
+                            <span class="checked-indicator"></span> True (صحيح)
+                        </label>
+                        <label class="${tfStyleF}">
+                            <input type="radio" name="q1-${q.id}" class="option-input" ${isFalseChecked ? 'checked' : ''} onchange="submitQuizAnswer(1, ${q.id}, 'false')" ${ans !== undefined ? 'disabled' : ''}>
+                            <span class="checked-indicator"></span> False (خطأ)
+                        </label>
+                    </div>`;
+                }
+                else if (activeQuizId === 2) { // Single Choice MCQ
+                    let choiceLayout = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">`;
+                    q.options.forEach((opt, oIdx) => {
+                        let isOptChecked = ans !== undefined && parseInt(ans) === oIdx;
+                        let lblStyle = "option-label flex items-center gap-3 p-3 text-xs font-semibold rounded-xl ";
+                        
+                        if(ans !== undefined) {
+                            if(q.correct === oIdx) lblStyle += "bg-correct border-emerald-500";
+                            else if(isOptChecked) lblStyle += "bg-incorrect border-rose-500";
+                        }
+                        
+                        choiceLayout += `<label class="${lblStyle}">
+                            <input type="radio" name="q2-${q.id}" class="option-input" ${isOptChecked ? 'checked' : ''} onchange="submitQuizAnswer(2, ${q.id}, ${oIdx})" ${ans !== undefined ? 'disabled' : ''}>
+                            <span class="checked-indicator"></span> ${opt}
+                        </label>`;
+                    });
+                    choiceLayout += `</div>`;
+                    interactiveArea.innerHTML = choiceLayout;
+                }
+                else if (activeQuizId === 3) { // Multiple Choices Multi-Select
+                    let currentSelections = ans || [];
+                    let multLayout = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">`;
+                    
+                    q.options.forEach((opt, oIdx) => {
+                        let isSelected = currentSelections.includes(oIdx);
+                        let lblStyle = "option-label flex items-center gap-3 p-3 text-xs font-semibold rounded-xl ";
+                        
+                        if(ans !== undefined) {
+                            if(q.correct.includes(oIdx)) lblStyle += "bg-correct border-emerald-500";
+                            else if(isSelected) lblStyle += "bg-incorrect border-rose-500";
+                        }
+                        
+                        multLayout += `<label class="${lblStyle}">
+                            <input type="checkbox" class="option-input" ${isSelected ? 'checked' : ''} onchange="accumulateMultiChoiceState(${q.id}, ${oIdx})" ${ans !== undefined ? 'disabled' : ''}>
+                            <span class="checked-indicator"></span> ${opt}
+                        </label>`;
+                    });
+                    multLayout += `</div>`;
+                    
+                    if(ans === undefined) {
+                        multLayout += `<div class="flex justify-end pt-3">
+                            <button onclick="lockMultiChoiceAnswer(${q.id})" class="px-4 py-1.5 bg-emerald-600 text-white text-xs font-black rounded-xl hover:bg-emerald-700 transition-all">تأكيد خياراتي والحل</button>
+                        </div>`;
+                    }
+                    interactiveArea.innerHTML = multLayout;
+                }
+                else if (activeQuizId === 4) { // Absolute Free Translation
+                    let currentText = ans ? ans.text : '';
+                    if(ans === undefined) {
+                        interactiveArea.innerHTML = `<div class="space-y-3">
+                            <textarea id="tx-area-${q.id}" rows="2" placeholder="اكتب صياغتك الترجمية الحرة هنا بدقة..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"></textarea>
+                            <div class="flex justify-end">
+                                <button onclick="evaluateTranslationInput(${q.id})" class="px-4 py-1.5 bg-amber-600 text-white text-xs font-black rounded-xl hover:bg-amber-700 transition-all">إرسال وتدقيق الترجمة</button>
+                            </div>
+                        </div>`;
+                    } else {
+                        interactiveArea.innerHTML = `<div class="space-y-3 bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs">
+                            <div><span class="font-bold text-slate-500">ترجمتك المقدمة:</span> <p class="text-slate-800 font-semibold mt-1">${currentText}</p></div>
+                            <div class="pt-2 border-t border-slate-200"><span class="font-bold text-emerald-600 block mb-1">نموذج الإجابة المقترح:</span> <p class="font-bold text-slate-900 leading-relaxed">${q.sampleAnswer}</p></div>
+                            <div class="pt-2 flex justify-between items-center bg-white p-2 rounded-lg border border-slate-100">
+                                <span class="font-black text-indigo-700">النتيجة التقديرية المحتسبة:</span>
+                                <span class="px-2.5 py-1 bg-indigo-50 text-indigo-600 font-black rounded-md">${ans.score.toFixed(1)} / 5</span>
+                            </div>
+                        </div>`;
+                    }
+                }
+
+                card.appendChild(interactiveArea);
+
+                // Inline Explanation Hint panel display mechanism
+                if (showHints || ans !== undefined) {
+                    const hintBox = document.createElement('div');
+                    hintBox.className = "p-3.5 bg-slate-50 border-r-4 border-indigo-500 text-xs text-slate-600 font-medium rounded-l-xl space-y-1";
+                    hintBox.innerHTML = `<span class="font-extrabold text-indigo-700 block text-[10px] uppercase">التوضيح اللغوي ومفاتيح الحل:</span>
+                    <p>لضمان الكفاءة، راجع دائماً مواضع ترتيب الصفات والأفعال المساعدة. الإجابة النموذجية المعتمدة ترتكز على القواعد البنيوية الأساسية.</p>`;
+                    card.appendChild(hintBox);
+                }
+
+                container.appendChild(card);
+            });
+            calculateGlobalStats();
+        }
+
+        // Action Answer Submissions Processing
+        function submitQuizAnswer(quizId, questionId, value) {
+            userProgress[quizId][questionId] = value;
+            
+            // Check Correctness to trigger Audio FX elements
+            let qData = quizDatabase[quizId][questionId-1];
+            let isCorrect = false;
+            if(quizId === 1) isCorrect = value === qData.correct;
+            if(quizId === 2) isCorrect = parseInt(value) === qData.correct;
+
+            if(isCorrect) {
+                playSound('success');
+                confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
+            } else {
+                playSound('fail');
+            }
+
+            saveProgress();
+            if(activeViewMode === 'one') {
+                setTimeout(() => changeActiveSingleViewIndex(1), 800);
+            } else {
+                renderActiveQuizBody();
+            }
+            renderNavigationGrid();
+        }
+
+        // Multi-choice state storage array tracking
+        let tempMultiChoices = {};
+        function accumulateMultiChoiceState(qId, optionIdx) {
+            if(!tempMultiChoices[qId]) tempMultiChoices[qId] = [];
+            let arr = tempMultiChoices[qId];
+            if(arr.includes(optionIdx)) {
+                tempMultiChoices[qId] = arr.filter(x => x !== optionIdx);
+            } else {
+                arr.push(optionIdx);
+            }
+        }
+
+        function lockMultiChoiceAnswer(qId) {
+            let selections = tempMultiChoices[qId] || [];
+            userProgress[3][qId] = selections;
+            
+            let qData = quizDatabase[3][qId-1];
+            let correctCount = selections.filter(x => qData.correct.includes(x)).length;
+            if(correctCount === qData.correct.length && selections.length === qData.correct.length) {
+                playSound('success');
+                confetti({ particleCount: 40, spread: 50 });
+            } else {
+                playSound('fail');
+            }
+
+            saveProgress();
+            renderActiveQuizBody();
+            renderNavigationGrid();
+        }
+
+        // Intelligent Keyword-Matching Translation Scoring Mechanism
+        function evaluateTranslationInput(qId) {
+            const txt = document.getElementById(`tx-area-${qId}`).value.trim();
+            if(txt === "") return;
+
+            let qData = quizDatabase[4][qId-1];
+            let matchedKeywords = 0;
+            
+            qData.matches.forEach(kw => {
+                if(txt.toLowerCase().includes(kw.toLowerCase())) matchedKeywords++;
+            });
+
+            // Calculate score out of 5 based on key match compliance percentage
+            let complianceRatio = matchedKeywords / qData.matches.length;
+            let finalScore = complianceRatio * 5;
+            if(finalScore < 1.5 && txt.length > 10) finalScore = 2.0; // Partial writing comfort criteria
+
+            userProgress[4][qId] = {
+                text: txt,
+                score: parseFloat(finalScore.toFixed(1))
+            };
+
+            if(finalScore >= 3.5) {
+                playSound('success');
+                confetti({ particleCount: 40, angle: 60, spread: 55 });
+            } else {
+                playSound('fail');
+            }
+
+            saveProgress();
+            renderActiveQuizBody();
+            renderNavigationGrid();
+        }
+
+        function changeActiveSingleViewIndex(dir) {
+            let nextIdx = currentSingleQuestionIdx + dir;
+            if(nextIdx >= 0 && nextIdx < filteredQuestions.length) {
+                currentSingleQuestionIdx = nextIdx;
+                renderActiveQuizBody();
+            }
+        }
+
+        // Resets Functions Controllers
+        function resetActiveQuizOnly() {
+            if(confirm("هل أنت متأكد من تصفير وإلغاء كافة إجابات هذا النمط من الاختبارات فقط؟")) {
+                userProgress[activeQuizId] = {};
+                saveProgress();
+                applyActiveQuizFilters();
+            }
+        }
+
+        function resetAllQuizzesWithConfirm() {
+            if(confirm("تحذير! سيتم حذف كافة البيانات والنتائج المسجلة وتصفير المنصة تماماً للبدء من جديد. هل تود الاستمرار؟")) {
+                userProgress = { 1: {}, 2: {}, 3: {}, 4: {} };
+                saveProgress();
+                if(!document.getElementById('screen-quiz-container').classList.contains('hidden')) {
+                    applyActiveQuizFilters();
+                } else {
+                    calculateGlobalStats();
+                }
+            }
+        }
+
+        // Initialization Entrypoint
+        window.onload = () => {
+            calculateGlobalStats();
+        };
+    </script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
